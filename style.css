@@ -205,27 +205,6 @@ h2 {
     transform: scale(1.05);
 }
 
-.flow-container {
-    overflow-x: hidden;
-    white-space: nowrap;
-    width: 50vw; /* 画面幅にフィット */
-    margin: 0 auto;
-    border: 3px solid #ffffff;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-    background-color: rgba(0, 0, 0, 0.6);
-}
-
-.flow-wrapper {
-    display: inline-flex;
-    animation: scroll 20s linear infinite;
-}
-
-.flow-image {
-    width: 30vw; /* 幅を固定 */
-    height: auto;
-}
-
 @keyframes scroll {
     0% {
         transform: translateX(0);
@@ -351,10 +330,7 @@ h2 {
         height: 50vw; /* 高さを自動調整 */
     }
 
-    .flow-container {
-        width: 90vw;
-    }
-    #works, #interest{
+    #works{
         font-size: 1rem;
         margin-top: 50px;
         margin-bottom: 50px;

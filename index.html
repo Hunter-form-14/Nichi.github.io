@@ -26,9 +26,6 @@
         <a href="#works">
             <span class="main-text">Works</span>
         </a>
-        <a href="#interest">
-            <span class="main-text">Interest</span>
-        </a>
     </div>
 
     <p id="top"></p>
@@ -69,18 +66,6 @@
     <div class="add-space"><br></div>
 
     <div class="black-section">
-        <div class="add-space"><br></div>
-        <h1 id="interest">Interest</h1>
-        <div class="flow-container">
-            <div class="flow-wrapper">
-                <img src="1.jpg" alt="image1" class="flow-image">
-                <img src="2.jpg" alt="image2" class="flow-image">
-                <img src="3.jpg" alt="image3" class="flow-image">
-                <img src="4.jpg" alt="image4" class="flow-image">
-                <img src="5.jpg" alt="image5" class="flow-image">
-                <img src="6.jpg" alt="image6" class="flow-image">
-            </div>
-        </div>
         <div class="copyright-text">©HaruyaMatsushima</div>
     </div>
 
@@ -120,18 +105,6 @@
             document.querySelector('.nav-button.left').addEventListener('click', () => {
                 slidePrev();
                 resetSlideInterval();
-            });
-
-            // Start automatic sliding
-            slideInterval = setInterval(slideNext, 5000);
-
-            const flowWrapper = document.querySelector('.flow-wrapper');
-            const images = Array.from(document.querySelectorAll('.flow-image'));
-
-            // 画像を2セットにしてループがスムーズになるように
-            images.forEach(image => {
-                const clone = image.cloneNode(true);
-                flowWrapper.appendChild(clone);
             });
         });
     </script>
