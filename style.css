@@ -1,0 +1,362 @@
+/* 全体スタイルのリセット */
+ /* 全体スタイルのリセット */
+ * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    overflow-x: hidden;
+}
+
+/* 本文の基本設定 */
+body {
+    font-family: "Playfair Display", serif;
+    text-align: center;
+    color: #333;
+    background-color: #beb6a8;
+    overflow-x: hidden;
+}
+
+/* タイトルとセクションスタイル */
+h1 {
+    transform: scale(2);
+    font-size: 3rem;
+    margin-top: 100px;
+    margin-bottom: 100px;
+}
+
+h2 {
+    transform: scale(1.5);
+    font-size: 2rem;
+    margin-top: 100px;
+    margin-bottom: 100px;
+}
+
+.add-space {
+    font-size: 2rem;
+    margin-bottom: 100px;
+}
+
+/* デフォルトでは代替テキストを非表示にする */
+.alt-text {
+    display: none;
+}
+
+/* メインテキストはデフォルトで表示 */
+.main-text {
+    display: inline;
+}
+
+.copyright-text {
+    padding: 30px;
+    opacity: 0.5;
+}
+
+/* Interestセクション以降の背景とテキスト色 */
+.black-section {
+    background-color: rgb(46, 46, 46);
+    /* 背景色を黒に */
+    color: white;
+    /* テキスト色を白に */
+}
+
+/* 左上に固定する丸いタブメニューのスタイル */
+.fixed-tab-l {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    display: flex;
+    gap: 10px;
+    background-color: #333;
+    border-radius: 15px;
+    padding: 10px 20px;
+    z-index: 1000;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* 個別のリンク要素のスタイル */
+.fixed-tab-l a {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    padding: 10px;
+    transition: color 0.3s ease;
+}
+
+/* ホバー時の背景色と角丸 */
+.fixed-tab-l a:hover {
+    color: #70ba63;
+    border-radius: 10px;
+    /* 角を丸くする */
+}
+
+/* 右上に固定する丸いタブメニューのスタイル */
+.fixed-tab-r {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    display: flex;
+    gap: 10px;
+    background-color: #333;
+    border-radius: 15px;
+    padding: 10px 20px;
+    z-index: 1000;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* 個別のリンク要素のスタイル */
+.fixed-tab-r a {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    padding: 10px;
+    transition: color 0.3s ease;
+}
+
+/* ホバー時の背景色と角丸 */
+.fixed-tab-r a:hover {
+    color: #70ba63;
+    background-color: rgb(72, 72, 72);
+    border-radius: 10px;
+    /* 角を丸くする */
+}
+
+/* 画像のスタイル */
+.head-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5);
+}
+
+.styled-image {
+    width: 50vw;
+    height: auto;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5);
+}
+
+/* スライドショーの外枠 */
+.slideshow-container {
+    position: relative;
+    width: 60vw;
+    /* 各画像の表示領域 */
+    height: 40vw;
+    overflow: hidden;
+    margin: 0 auto;
+    border: 2px solid #333;
+    border-radius: 10px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5);
+}
+
+/* スライドショーの全体ラッパー */
+.slideshow-wrapper {
+    display: flex;
+    transition: transform 1s ease;
+    /* スライドのアニメーション */
+    width: calc(60vw * 4);
+    /* 各画像の幅×画像数 */
+}
+
+/* 個々のスライド項目 */
+.slideshow-item {
+    position: relative;
+    width: 60vw;
+    /* 各画像の横幅 */
+    height: 40vw;
+    /* 各画像の高さ */
+    flex-shrink: 0;
+    overflow: hidden;
+    /* 説明テキストがはみ出さないようにする */
+}
+
+.slideshow-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+    display: block;
+}
+
+.image-description {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    padding: 10px;
+    background: rgba(0, 0, 0, 0.6);
+    color: #fff;
+    text-align: center;
+    font-size: 1rem;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: 2; /* 画像の前面に表示 */
+}
+
+/* マウスホバー時の説明表示 */
+.slideshow-item:hover .image-description {
+    opacity: 1;
+}
+
+/* ホバー時に画像が少し拡大される */
+.slideshow-item:hover img {
+    transform: scale(1.05);
+}
+
+.flow-container {
+    overflow-x: hidden;
+    white-space: nowrap;
+    width: 50vw; /* 画面幅にフィット */
+    margin: 0 auto;
+    border: 3px solid #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    background-color: rgba(0, 0, 0, 0.6);
+}
+
+.flow-wrapper {
+    display: inline-flex;
+    animation: scroll 20s linear infinite;
+}
+
+.flow-image {
+    width: 30vw; /* 幅を固定 */
+    height: auto;
+}
+
+@keyframes scroll {
+    0% {
+        transform: translateX(0);
+    }
+
+    100% {
+        transform: translateX(-50%);
+    }
+}
+
+/* 文字と画像を横並びに配置するコンテナ */
+.content-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 150px; /* テキストと画像の間隔 */
+    margin-top: 150px;
+}
+
+/* テキスト（タイトルと説明）を縦に配置するコンテナ */
+.text-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* プレイボタンのスタイル */
+.play-button {
+    padding: 10px 20px;
+    font-size: 1.2rem;
+    color: #fff;
+    background-color: #333;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 15px;
+    transition: background-color 0.3s ease;
+}
+
+.play-button:hover {
+    background-color: #555;
+}
+
+.nav-button {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    border: none;
+    font-size: 2rem;
+    padding: 10px;
+    cursor: pointer;
+    z-index: 10;
+    transition: background-color 0.3s ease;
+}
+
+.nav-button.left {
+    left: -10px; /* Positioned slightly outside the container */
+}
+
+.nav-button.right {
+    right: -10px; /* Positioned slightly outside the container */
+}
+
+.nav-button:hover {
+    background-color: rgba(0, 0, 0, 0.8);
+}
+
+@media (max-aspect-ratio: 1/1) {    
+    .main-text {
+        display: none; /* 通常のテキストを非表示 */
+    }
+
+    .alt-text {
+        display: inline; /* 代替テキストを表示 */
+    }
+
+    .add-space {
+        font-size: 1rem;
+        margin-bottom: 50px;
+    }
+
+    .fixed-tab-r {
+        display: none; /* スマホ画面サイズで非表示 */
+    }
+
+    /* .content-containerを縦配置に変更 */
+    .content-container {
+        flex-direction: column;
+        align-items: center;
+        gap: 20px;
+        margin-top: 20px;
+    }
+
+    /* テキストとボタンのコンテナを画像の上に配置 */
+    .text-container {
+        order: -1; /* 順序を上に変更 */
+        margin-bottom: 20px; /* 画像との間隔 */
+    }
+
+    /* ボタンや画像サイズの調整 */
+    .styled-image {
+        width: 80vw; /* モバイル表示に合わせて画像サイズを縮小 */
+    }
+
+    .play-button {
+        padding: 8px 16px;
+        font-size: 1rem;
+    }
+
+    .slideshow-container {
+        width: 90vw; /* 画面幅の90%に設定 */
+        height: 50vw; /* 高さを自動調整 */
+    }
+
+    .slideshow-wrapper {
+        width: calc(90vw * 4);
+    }
+
+    .slideshow-item {
+        width: 90vw; /* スライドアイテムの幅も調整 */
+        height: 50vw; /* 高さを自動調整 */
+    }
+
+    .flow-container {
+        width: 90vw;
+    }
+    #works, #interest{
+        font-size: 1rem;
+        margin-top: 50px;
+        margin-bottom: 50px;
+    }
+}
