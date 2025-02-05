@@ -227,6 +227,13 @@ h2 {
     align-items: center;
 }
 
+.profile-image {
+    width: 25vw;
+    height: auto;
+    border-radius: 50%;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5);
+}
+
 /* プレイボタンのスタイル */
 .play-button {
     padding: 10px 20px;
