@@ -23,15 +23,15 @@ body {
 h1 {
     transform: scale(2);
     font-size: 3rem;
-    margin-top: 100px;
+    padding-top: 100px;
     margin-bottom: 100px;
 }
 
 h2 {
     transform: scale(1.5);
     font-size: 2rem;
-    margin-top: 100px;
-    margin-bottom: 100px;
+    padding-top: 50px;
+    margin-bottom: 50px;
 }
 
 .add-space {
@@ -150,18 +150,22 @@ h2 {
 /* テキスト（タイトルと説明）を縦に配置するコンテナ */
 .profile-text {
     display: flex;
+    margin-left: 10vw;
     flex-direction: column;
     align-items: center;
 }
-
-.profile-text p, h3 {
+.profile-text h3 {
+    font-size: 2.5rem;
+    background-color: #555;
+    align-self: flex-start;
+}
+.profile-text p {
     font-size: 1.5rem;
-    margin-left: 10vw;
     align-self: flex-start;
 }
 
 .profile-image {
-    width: 25vw;
+    width: 30vw;
     height: auto;
     border-radius: 50%;
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5);
@@ -169,24 +173,13 @@ h2 {
 
 /* スライドショーの外枠 */
 .slideshow-container {
-    position: relative;
     width: 60vw;
-    /* 各画像の表示領域 */
     height: 40vw;
     overflow: hidden;
     margin: 0 auto;
     border: 2px solid #333;
     border-radius: 10px;
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5);
-}
-
-/* スライドショーの全体ラッパー */
-.slideshow-wrapper {
-    display: flex;
-    transition: transform 1s ease;
-    /* スライドのアニメーション */
-    width: calc(60vw * 4);
-    /* 各画像の幅×画像数 */
 }
 
 /* 個々のスライド項目 */
