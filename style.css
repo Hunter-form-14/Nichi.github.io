@@ -141,7 +141,7 @@ h2 {
 /* 文字と画像を横並びに配置するコンテナ */
 .profile-container {
     display: flex;
-    align-items: center;
+    align-items: left;
     justify-content: center;
     margin-top: 150px;
 }
@@ -151,7 +151,6 @@ h2 {
     display: flex;
     margin-left: 10vw;
     flex-direction: column;
-    align-items: left;
 }
 
 .profile-text p {
