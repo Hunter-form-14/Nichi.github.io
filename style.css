@@ -151,12 +151,12 @@ h2 {
     display: flex;
     margin-left: 10vw;
     flex-direction: column;
-    align-self: flex-start;
-    align-items: center;
+    align-items: left;
 }
+
 .profile-text p {
     font-size: 1.5rem;
-    text-indent: 5em; 
+    text-indent: 5em;
 }
 
 .profile-image {
@@ -173,7 +173,7 @@ h2 {
     margin-top: 150px;
 }
 
-.slideshow-item img {
+.gallery-container img {
     width: 20vw;
     height: auto;
     object-fit: cover;
@@ -198,12 +198,12 @@ h2 {
 }
 
 /* マウスホバー時の説明表示 */
-.slideshow-item:hover .image-description {
+.gallery-container:hover .image-description {
     opacity: 1;
 }
 
 /* ホバー時に画像が少し拡大される */
-.slideshow-item:hover img {
+.gallery-container:hover img {
     transform: scale(1.1);
 }
 
