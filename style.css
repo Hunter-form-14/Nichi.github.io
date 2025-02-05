@@ -54,7 +54,13 @@ h2 {
     opacity: 0.5;
 }
 
-/* Interestセクション以降の背景とテキスト色 */
+.beige-section {
+    background-color: #beb6a8;
+    /* 背景色をベージュに */
+    color: black;
+    /* テキスト色を黒に */
+}
+
 .black-section {
     background-color: rgb(46, 46, 46);
     /* 背景色を黒に */
@@ -205,18 +211,8 @@ h2 {
     transform: scale(1.05);
 }
 
-@keyframes scroll {
-    0% {
-        transform: translateX(0);
-    }
-
-    100% {
-        transform: translateX(-50%);
-    }
-}
-
 /* 文字と画像を横並びに配置するコンテナ */
-.content-container {
+.profile-container {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -225,7 +221,7 @@ h2 {
 }
 
 /* テキスト（タイトルと説明）を縦に配置するコンテナ */
-.text-container {
+.profile-text {
     display: flex;
     flex-direction: column;
     align-items: center;

@@ -23,43 +23,29 @@
         <a href="#top">
             <span class="main-text">Top</span>
         </a>
+        <a href="#introduction">
+            <span class="main-text">Introduction</span>
+        </a>
         <a href="#works">
             <span class="main-text">Works</span>
-        </a>
-        <a href="#interest">
-            <span class="main-text">Interest</span>
         </a>
     </div>
 
     <p id="top"></p>
     <img src="IconAtTatamiRoom.jpg" alt="icon" class="head-image">
 
-    <h1 id="works">Works</h1>
-    <div class="slideshow-container">
-        <div class="slideshow-wrapper">
-            <div class="slideshow-item">
-                <a href="ninjado.html">
-                    <img src="ninjado.png" alt="忍者道">
-                    <div class="image-description">忍者道</div>
-                </a>
+    <div class="beige-section">
+        <h1 id="introduction">Introduction</h1>
+        <div class="profile-container">
+            <div class="profile-image">
+                <img src="me.jpg" alt="icon" class="styled-image">
             </div>
-            <div class="slideshow-item">
-                <a href="ossan.html">
-                    <img src="ossan.png" alt="残業シミュレータ">
-                    <div class="image-description">残業シミュレータ</div>
-                </a>
-            </div>
-            <div class="slideshow-item">
-                <a href="pachinko.html">
-                    <img src="pachinko.png" alt="パチンコゲーム">
-                    <div class="image-description">パチンコゲーム</div>
-                </a>
-            </div>
-            <div class="slideshow-item">
-                <a href="tatami.html">
-                    <img src="tatamiRoom.png" alt="畳部屋CG">
-                    <div class="image-description">畳部屋CG</div>
-                </a>
+            <div class="profile-text">
+                <h2>松島陽也</h2>
+                <p>・好きな物：創作物, 科学, 子供, 食事</p>
+                <p>・熱中している分野：AI, CG, デジファブ, BCI, ゲーム</p>
+                <p>・よく使う言語：Processing, C#, Python, JavaScript, MATLAB</p>
+                <p>・よく使うツール：Blender, Unity, GitHub, DaVinci Resolve</p>
             </div>
         </div>
     </div>
@@ -67,47 +53,18 @@
     <div class="add-space"><br></div>
 
     <div class="black-section">
-        <div class="copyright-text">©HaruyaMatsushima</div>
+        <h1 id="works">Works</h1>
+        <div class="slideshow-container">
+
+        </div>
     </div>
 
+    <div class="copyright-text">©HaruyaMatsushima</div>
+
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const wrapper = document.querySelector('.slideshow-wrapper');
-            const items = document.querySelectorAll('.slideshow-item');
-            const itemWidth = items[0].clientWidth;
-            let currentIndex = 0;
-            let slideInterval;
+        // document.addEventListener('DOMContentLoaded', () => {
 
-            function updateSlidePosition() {
-                wrapper.style.transform = `translateX(-${currentIndex * itemWidth}px)`;
-            }
-
-            function slideNext() {
-                currentIndex = (currentIndex + 1) % items.length;
-                updateSlidePosition();
-            }
-
-            function slidePrev() {
-                currentIndex = (currentIndex - 1 + items.length) % items.length;
-                updateSlidePosition();
-            }
-
-            function resetSlideInterval() {
-                clearInterval(slideInterval);
-                slideInterval = setInterval(slideNext, 5000); // Restart the 5-second interval
-            }
-
-            // Event listeners for navigation buttons
-            document.querySelector('.nav-button.right').addEventListener('click', () => {
-                slideNext();
-                resetSlideInterval();
-            });
-
-            document.querySelector('.nav-button.left').addEventListener('click', () => {
-                slidePrev();
-                resetSlideInterval();
-            });
-        });
+        // });
     </script>
 </body>
 
