@@ -1,6 +1,6 @@
 /* 全体スタイルのリセット */
- /* 全体スタイルのリセット */
- * {
+/* 全体スタイルのリセット */
+* {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
@@ -143,7 +143,7 @@ h2 {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 150px; /* テキストと画像の間隔 */
+    /* テキストと画像の間隔 */
     margin-top: 150px;
 }
 
@@ -154,11 +154,11 @@ h2 {
     align-items: center;
 }
 
-.profile-text p {
+.profile-text p, h3 {
     font-size: 1.5rem;
     margin-left: 10vw;
     align-self: flex-start;
-  }
+}
 
 .profile-image {
     width: 25vw;
@@ -221,7 +221,8 @@ h2 {
     font-size: 1rem;
     opacity: 0;
     transition: opacity 0.3s ease;
-    z-index: 2; /* 画像の前面に表示 */
+    z-index: 2;
+    /* 画像の前面に表示 */
 }
 
 /* マウスホバー時の説明表示 */
@@ -266,24 +267,28 @@ h2 {
 }
 
 .nav-button.left {
-    left: -10px; /* Positioned slightly outside the container */
+    left: -10px;
+    /* Positioned slightly outside the container */
 }
 
 .nav-button.right {
-    right: -10px; /* Positioned slightly outside the container */
+    right: -10px;
+    /* Positioned slightly outside the container */
 }
 
 .nav-button:hover {
     background-color: rgba(0, 0, 0, 0.8);
 }
 
-@media (max-aspect-ratio: 1/1) {    
+@media (max-aspect-ratio: 1/1) {
     .main-text {
-        display: none; /* 通常のテキストを非表示 */
+        display: none;
+        /* 通常のテキストを非表示 */
     }
 
     .alt-text {
-        display: inline; /* 代替テキストを表示 */
+        display: inline;
+        /* 代替テキストを表示 */
     }
 
     .add-space {
@@ -292,7 +297,8 @@ h2 {
     }
 
     .fixed-tab-r {
-        display: none; /* スマホ画面サイズで非表示 */
+        display: none;
+        /* スマホ画面サイズで非表示 */
     }
 
     /* .content-containerを縦配置に変更 */
@@ -305,13 +311,16 @@ h2 {
 
     /* テキストとボタンのコンテナを画像の上に配置 */
     .text-container {
-        order: -1; /* 順序を上に変更 */
-        margin-bottom: 20px; /* 画像との間隔 */
+        order: -1;
+        /* 順序を上に変更 */
+        margin-bottom: 20px;
+        /* 画像との間隔 */
     }
 
     /* ボタンや画像サイズの調整 */
     .styled-image {
-        width: 80vw; /* モバイル表示に合わせて画像サイズを縮小 */
+        width: 80vw;
+        /* モバイル表示に合わせて画像サイズを縮小 */
     }
 
     .play-button {
@@ -320,8 +329,10 @@ h2 {
     }
 
     .slideshow-container {
-        width: 90vw; /* 画面幅の90%に設定 */
-        height: 50vw; /* 高さを自動調整 */
+        width: 90vw;
+        /* 画面幅の90%に設定 */
+        height: 50vw;
+        /* 高さを自動調整 */
     }
 
     .slideshow-wrapper {
@@ -329,11 +340,13 @@ h2 {
     }
 
     .slideshow-item {
-        width: 90vw; /* スライドアイテムの幅も調整 */
-        height: 50vw; /* 高さを自動調整 */
+        width: 90vw;
+        /* スライドアイテムの幅も調整 */
+        height: 50vw;
+        /* 高さを自動調整 */
     }
 
-    #works{
+    #works {
         font-size: 1rem;
         margin-top: 50px;
         margin-bottom: 50px;
