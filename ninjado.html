@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <title>忍者道</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="works.css">
 </head>
 
 <body>
@@ -15,19 +16,19 @@
         </div>
 
         <!-- 文字と画像を横並びに配置するコンテナ -->
-        <div class="content-container">
-            <div class="text-container">
+        <div class="flex-container">
+            <div class="text-area">
                 <h1>忍者道</h1>
                 <p>プログラミング演習の授業で作成したものをUnityで再実装</p>
-                <p><br></p>
-                <button class="play-button" onclick="window.location.href='WebGLBuild/index.html'">プレイ</button>
-                <p>*対応機種はPCのみ</p>
+                <br>
+                <a href="WebGLBuild/index.html" class="play-button">プレイ</a>
             </div>
-            <img src="ninjado.png" alt="実行画面" class="styled-image">
+            <img src="jpg/ninjado.jpg" alt="実行画面" class="styled-image">
         </div>
 
+        <div class="add-space"></div>
+        
         <div class="copyright-text">
-            <p><br><br><br></p>
             <p>© Yuto Chiba, Yohei Ogawa, Ryota Kurosawa, Haruya Matsushima</p>
         </div>
     </div>

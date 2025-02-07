@@ -5,27 +5,38 @@
     <meta charset="UTF-8">
     <title>パチンコゲーム</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="works.css">
 </head>
 
 <body>
     <div class="beige-section">
         <!-- 固定タブメニュー -->
-        <div class="fixed-tab-l">              
+        <div class="fixed-tab-l">
             <a href="index.html">HaruyaMatsushima</a>
         </div>
 
         <!-- 文字と画像を横並びに配置するコンテナ -->
-        <div class="content-container">
-            <div class="text-container">
+        <div class="flex-container">
+            <div class="text-area">
                 <h2>パチンコゲーム</h2>
-                <p>一発やっていきませんか？</p>
+                <br>
                 <p>Unityで実装</p>
             </div>
-            <img src="pachinko.png" alt="実行画面" class="styled-image">
+            <video controls width="800">
+                <source src="mp4/pachinko.mp4" type="video/mp4">
+            </video>
+        </div>
+        <div class="black-section">
+            <div class="flex-container">
+                <div class="text-area">
+                    <p>Blenderでモデリング</p>
+                </div>
+                <img src="jpg/pachinko.jpg" alt="Blender" class="styled-image">
+            </div>
+            <div class="add-space"></div>
         </div>
 
         <div class="copyright-text">
-            <p><br><br><br></p>
             <p>© Haruya Matsushima</p>
         </div>
     </div>
