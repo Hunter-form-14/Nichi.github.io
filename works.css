@@ -18,18 +18,119 @@
     margin-top: 10vh;
 }
 
-/* プレイボタンのスタイル */
-.play-button {
-    padding: 10px 20px;
-    font-size: 1.2rem;
-    z-index: 1000;
-    color: #fff;
-    background-color: #333;
-    border: none;
-    border-radius: 10%;
-    transition: background-color 0.3s ease;
+/* 左右分割レイアウトのためのメインコンテナ */
+.split-container {
+    display: flex;
+    width: 100%;
+    height: 100vh; /* コンテナの高さをビューポートの100%に固定 */
+    box-sizing: border-box;
 }
 
+/* 左ペイン（テキストエリア） */
+.left-pane {
+    width: 50%;
+    height: 100%; /* 親コンテナの高さに合わせる */
+    background-color: #c5c5c5;
+    color: #333;
+    overflow-y: auto; /* スクロール機能を有効にする */
+    box-sizing: border-box;
+    text-align: left;
+    /* 固定ヘッダーがコンテンツに被らないようパディングを調整 */
+    padding: 80px 50px 40px; 
+}
+
+/* 右ペイン（画像・ビデオエリア） */
+.right-pane {
+    width: 50%;
+    height: 100%; /* 親コンテナの高さに合わせる */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: #474747;
+    box-sizing: border-box;
+    gap: 30px;
+    overflow-y: auto; /* 右側もコンテンツが溢れた場合スクロール可能に */
+    /* 固定ヘッダーがコンテンツに被らないようパディングを調整 */
+    padding: 80px 40px;
+}
+
+/* === スクロールバーを非表示にする設定 (ここから追加) === */
+/* Chrome, Safari, Edge */
+.left-pane::-webkit-scrollbar,
+.right-pane::-webkit-scrollbar {
+    display: none;
+}
+
+/* Firefox */
+.left-pane,
+.right-pane {
+    scrollbar-width: none;
+}
+/* === スクロールバー非表示設定ここまで === */
+
+
+/* 右ペイン内の画像とビデオの共通スタイル */
+.content-media {
+    max-width: 90%;
+    height: auto;
+    border-radius: 8px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    flex-shrink: 0; /* 縮まないように設定 */
+}
+
+/* 左ペイン内の見出しスタイルの上書き */
+.left-pane h1, .left-pane h2 {
+    transform: none;
+    padding-top: 0;
+    text-align: left;
+}
+.left-pane h1 {
+    font-size: 2.8rem;
+    padding-bottom: 20px;
+}
+.left-pane h2 {
+    font-size: 1.8rem;
+    padding-top: 25px;
+    margin-bottom: 15px;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 10px;
+}
+.left-pane p {
+    line-height: 1.7;
+}
+
+/* 区切り線のスタイル */
+.separator {
+    border: 0;
+    height: 1px;
+    background-color: #eee;
+    margin: 30px 0;
+}
+
+/* プレイボタンの仮スタイル */
+.play-button {
+    display: inline-block;
+    padding: 12px 25px;
+    background-color: #70ba63;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: bold;
+    margin: 20px 0;
+    transition: background-color 0.3s ease;
+}
 .play-button:hover {
-    background-color: #555;
+    background-color: #5f9d54;
+}
+
+/* copyright-textのスタイル（左ペイン内に移動したため調整） */
+.copyright-text {
+    padding-top: 30px;
+    margin-top: 30px;
+    border-top: 1px solid #eee;
+    background-color: transparent; /* 背景色を削除 */
+    color: #888;
+    text-align: left;
+    opacity: 0.9;
 }

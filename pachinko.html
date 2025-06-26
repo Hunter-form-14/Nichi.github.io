@@ -9,37 +9,43 @@
 </head>
 
 <body>
-    <div class="beige-section">
-        <!-- 固定タブメニュー -->
-        <div class="fixed-tab-l">
-            <a href="index.html">HaruyaMatsushima</a>
+    <div class="fixed-tab-r">
+        <a href="index.html">HaruyaMatsushima</a>
+    </div>
+
+    <div class="split-container">
+
+        <div class="left-pane">
+            <h2>パチンコゲーム</h2>
+            <br>
+            <h3>開発目的</h3>
+            <p>自分のアイデアや世界観を形にしたいという思いに加え、3D表現の持つ幅広い可能性に魅力を感じたことが開発のきっかけです。物理的な挙動をリアルに再現する3Dモデリングとプログラミングに挑戦したいと考え、本ゲームを制作しました。</p>
+            <br>
+            <h3>開発期間</h3>
+            <p>学部1年次（2023年3月〜2024年7月、約4ヶ月間）</p>
+            <br>
+            <h3>開発環境</h3>
+            <p>使用言語：C#</p>
+            <p>ゲームエンジン：Unity</p>
+            <p>ハードウェア：Windows</p>
+            <p>その他：Blender（3Dモデリングに使用）</p>
+            <br>
+            <h3>制作物の概要</h3>
+            <p>企画から設計、3Dモデリング、プログラミングまでを一人で担当した3Dパチンコゲームです。開発では、Blenderを用いて複雑な形状のモデリングを行い、Unityの物理エンジンで玉の挙動をリアルに再現することに注力しました。制作過程で発生したエラーやモデリングの課題は、既存のゲームを参考にしたり、関連書籍やウェブ動画で基礎から学び直したりすることで解決しました。</p>
+            <div class="copyright-text">
+                <p>© Haruya Matsushima</p>
+            </div>
         </div>
 
-        <!-- 文字と画像を横並びに配置するコンテナ -->
-        <div class="flex-container">
-            <div class="text-area">
-                <h2>パチンコゲーム</h2>
-                <br>
-                <p>Unityで実装</p>
-            </div>
-            <video controls width="800">
+        <div class="right-pane">
+            <video controls class="content-media">
                 <source src="mp4/pachinko.mp4" type="video/mp4">
             </video>
-        </div>
-        <div class="black-section">
-            <div class="flex-container">
-                <div class="text-area">
-                    <p>Blenderでモデリング</p>
-                </div>
-                <img src="jpg/pachinko.jpg" alt="Blender" class="styled-image">
-            </div>
-            <div class="add-space"></div>
+            <img src="jpg/pachinko.jpg" alt="Blender" class="content-media">
         </div>
 
-        <div class="copyright-text">
-            <p>© Haruya Matsushima</p>
-        </div>
     </div>
+
 </body>
 
 </html>

@@ -3,37 +3,48 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>ドライブシミュレータ</title>
+    <title>VRドライビングシミュレーター</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="works.css">
 </head>
 
 <body>
-    <div class="beige-section">
-        <!-- 固定タブメニュー -->
-        <div class="fixed-tab-l">              
-            <a href="index.html">HaruyaMatsushima</a>
+    <div class="fixed-tab-r">
+        <a href="index.html">HaruyaMatsushima</a>
+    </div>
+
+    <div class="split-container">
+
+        <div class="left-pane">
+            <h2>VRドライビングシミュレーター</h2>
+            <br>
+            <h3>開発目的</h3>
+            <p>オープンキャンパス展示用の体験型VRレースゲーム制作（研究室活動・イベント）</p>
+            <br>
+            <h3>開発期間</h3>
+            <p>学部2年次（2024年4月〜8月、約4ヶ月間）</p>
+            <br>
+            <h3>開発環境</h3>
+            <p>使用言語：C#, C++</p>
+            <p>ゲームエンジン：Unity</p>
+            <p>ハードウェア：Arduino、ヘッドマウントディスプレイ、ハンドル型コントローラー、椅子振動装置、アロマシューター、サーキュレーター</p>
+            <p>その他：Blender（3Dモデリング）、Git（バージョン管理）</p>
+            <br>
+            <h3>制作物の概要</h3>
+            <p>4人チームで、オープンキャンパス来場者向けの没入型VRレースゲームを開発しました。Unityを用いてゲーム全体を構築し、複数のデバイス（HMD、ハンドル型コントローラー、椅子の振動装置、アロマシューター、サーキュレーター）を連携させることで、視覚・聴覚・触覚・嗅覚・風圧による多感覚体験を実現しました。私はチームリーダーとして、企画・進捗管理・タスク分担・Unity/C#による実装・ビジュアルデザインを担当しました。</p>
+            <div class="copyright-text">
+                <p>© Haruya Matsushima, Eisyun Kikkawa, Haruka Sugo, Nanami Ito</p>
+            </div>
         </div>
 
-        <!-- 文字と画像を横並びに配置するコンテナ -->
-        <div class="flex-container">
-            <div class="text-area">
-                <h2>ドライブシミュレータ</h2>
-                <br>
-                <p>VRドライブゲーム</p>
-                <p>Unityで実装</p>
-            </div>
-            <video controls width="800">
+        <div class="right-pane">
+            <video controls class="content-media">
                 <source src="mp4/driving.mp4" type="video/mp4">
             </video>
         </div>
-        
-        <div class="add-space"></div>
 
-        <div class="copyright-text">
-            <p>© Haruya Matsushima, Eisyun Kikkawa, Haruka Sugo, Nanami Ito</p>
-        </div>
     </div>
+
 </body>
 
 </html>

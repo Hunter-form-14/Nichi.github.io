@@ -9,31 +9,29 @@
 </head>
 
 <body>
-    <div class="beige-section">
-        <!-- 固定タブメニュー -->
-        <div class="fixed-tab-l">              
-            <a href="index.html">HaruyaMatsushima</a>
+    <div class="fixed-tab-r">              
+        <a href="index.html">HaruyaMatsushima</a>
+    </div>
+
+    <div class="split-container">
+        
+        <div class="left-pane">
+            <h2>残業シミュレータ</h2>
+            <p>残業中のおっさんを叫んで起こすゲーム</p>
+            <p>Processingで実装</p>
+            <div class="copyright-text">
+                <p>© Haruya Matsushima</p>
+            </div>
         </div>
 
-        <!-- 文字と画像を横並びに配置するコンテナ -->
-        <div class="flex-container">
-            <div class="text-area">
-                <h2>残業シミュレータ</h2>
-                <br>
-                <p>残業中のおっさんを叫んで起こすゲーム</p>
-                <p>Processingで実装</p>
-            </div>
-            <video controls width="800">
+        <div class="right-pane">
+            <video controls class="content-media">
                 <source src="mp4/ossan.mp4" type="video/mp4">
             </video>
         </div>
-        
-        <div class="add-space"></div>
 
-        <div class="copyright-text">
-            <p>© Haruya Matsushima</p>
-        </div>
     </div>
+
 </body>
 
 </html>

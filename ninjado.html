@@ -3,51 +3,53 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>忍者道</title>
+    <title>忍者道 - 分割レイアウト</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="works.css">
 </head>
 
 <body>
-    <div class="beige-section">
-        <!-- 固定タブメニュー -->
-        <div class="fixed-tab-l">              
-            <a href="index.html">HaruyaMatsushima</a>
-        </div>
-
-        <!-- 文字と画像を横並びに配置するコンテナ -->
-        <div class="flex-container">
-            <div class="text-area">
-                <h1>忍者道</h1>
-                <p>プログラミング演習の授業で作成したものをUnityで再実装</p>
-                <br>
-                <a href="WebGLBuild/index.html" class="play-button">プレイ</a>
-            </div>
-            <img src="jpg/ninjado.jpg" alt="実行画面" class="styled-image">
-        </div>
-
-        <div class="add-space"></div>
-
-        <div class="black-section">
-            <div class="add-space"></div>
-            <div class="flex-container">
-                <div class="text-area">
-                    <p>エディットモードでは、試遊しながら舞台を作成できる</p>
-                    <p>ブロックの配置・削除、Undo、Redoができる</p>
-                    <br>
-                    <p>プレイモードでは、作成した舞台をプレイできる</p>
-                </div>
-                <video controls width="800">
-                    <source src="mp4/Ninjado.mp4" type="video/mp4">
-                </video>
-            </div>
-            <div class="add-space"></div>
-        </div>
-        
-        <div class="copyright-text">
-            <p>© Yuto Chiba, Yohei Ogawa, Ryota Kurosawa, Haruya Matsushima</p>
-        </div>
+    <div class="fixed-tab-r">
+        <a href="index.html">HaruyaMatsushima</a>
     </div>
+
+    <div class="split-container">
+
+        <div class="left-pane">
+            <h1>忍者道</h1>
+            <a href="WebGLBuild/index.html" class="play-button">ゲームをプレイ</a>
+            <br>
+            <h2>ゲームの概要</h2>
+            <br>
+            <h3>開発目的</h3>
+            <p>昔からゲームやアニメなどの作品が好きで、自分のアイデアや世界観を形にしたいという思いがありました。特に、プレイヤー自身がコンテンツを創造し共有できるUGC（User Generated Content）の仕組みに魅力を感じ、ユーザーが自作ステージを投稿できる2Dアクションゲームの開発に着手しました。</p>
+            <br>
+            <h3>開発期間</h3>
+            <p>学部1,2年次（2023年10月〜2024年2月、約4ヶ月間）</p>
+            <br>
+            <h3>開発環境</h3>
+            <p>使用言語：C#</p>
+            <p>ゲームエンジン：Unity</p>
+            <p>ハードウェア：Windows</p>
+            <p>その他：ミニドット絵メーカー３（ビジュアルデザインに使用）</p>
+            <br>
+            <h3>制作物の概要</h3>
+            <p>大学在学中、複数人と授業課題で制作したゲームに着想を得て、Unityを用いて個人で企画・設計・プログラミング・ビジュアルデザインの全工程を担当し、2Dアクションゲームとして新たに開発しました。最大の特徴は、プレイヤーがオリジナルのステージを自由に作成し、他のユーザーと共有できる点です。プログラミングだけでなく、キャラクターのイラスト制作やUIデザイン、アニメーション、エフェクトの実装など、ビジュアル面や操作性にも工夫を凝らしました。</p>
+
+            <div class="copyright-text">
+                <p>© Yuto Chiba, Haruya Matsushima, Yohei Ogawa, Ryota Kurosawa</p>
+            </div>
+        </div>
+
+        <div class="right-pane">
+            <img src="jpg/ninjado.jpg" alt="実行画面" class="content-media">
+            <video controls class="content-media">
+                <source src="mp4/Ninjado.mp4" type="video/mp4">
+            </video>
+        </div>
+
+    </div>
+
 </body>
 
 </html>

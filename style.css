@@ -108,7 +108,6 @@ h2 {
 /* ホバー時の背景色と角丸 */
 .fixed-tab-r a:hover {
     color: #70ba63;
-    background-color: rgb(72, 72, 72);
     border-radius: 10px;
     /* 角を丸くする */
 }
@@ -147,6 +146,34 @@ h2 {
 }
 .profile-box p, h3 {
     text-align: left;
+}
+
+/* 追加：プロフィールのテキストエリア用スタイル */
+.profile-text-area {
+    width: 45vw;
+    height: 70vh;
+    overflow-y: auto;
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: left;
+    margin-left: 5vw;
+    /* フォントを見やすくするための調整 */
+    font-family: 'Noto Sans JP', sans-serif; /* 日本語対応のゴシック体フォント例 */
+    line-height: 1.7; /* 行間を少し広げる */
+    font-size: 1rem; /* 少し大きくする */
+    color: #333; /* 文字色を少し濃くする */
+}
+
+.profile-text-area h3 {
+    margin-bottom: 15px;
+    color: #444;
+    font-size: 1.2rem; /* h3のフォントサイズも調整 */
+}
+
+.profile-text-area p {
+    margin-bottom: 8px;
 }
 
 .profile-image {
