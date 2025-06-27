@@ -6,21 +6,145 @@
     <title>ベンデイドットアート風画像処理</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="works.css">
+    <link href="https://cdn.jsdelivr.net/gh/amroamroamro/prettify-matlab@master/prettify.css" rel="stylesheet" type="text/css">
 </head>
 
 <body>
-    <div class="fixed-tab-r">              
+
+    <div class="fixed-tab-r">
         <a href="index.html">HaruyaMatsushima</a>
     </div>
 
     <div class="split-container">
-        
+
         <div class="left-pane">
             <h2>ベンデイドットアート風<br>画像処理</h2>
             <p>画像をベンデイドットアート風に加工</p>
             <p>MATLABで実装</p>
             <br>
             <a href="pdf/imageProcessing.pdf" class="play-button">pdf</a>
+
+            <div class="code-container">
+                <h3>ソースコード (MATLAB)</h3>
+                <pre class="prettyprint lang-m linenums">
+<code>
+%% 元画像の読み込み
+% ユーザが画像ファイルを選択
+[file, path] = uigetfile({'*.jpg;*.jpeg;*.png;*.bmp', 'Image Files (*.jpg, *.jpeg, *.png, *.bmp)'; '*.*', 'All Files (*.*)'});
+fullFilePath = fullfile(path, file);
+oriI = imread(fullFilePath);
+%figure, imshow(oriI);
+
+%% 指定の大きさにリサイズ
+% 固定解像度の設定
+fixedHeight = 1024; % 固定する高さ
+fixedWidth = 1024; % 固定する幅
+
+% 画像の縦横比を維持しながらリサイズ
+[oriHeight, oriWidth, ~] = size(oriI);
+if oriHeight > oriWidth
+    scaleFactor = fixedHeight / oriHeight;
+else
+    scaleFactor = fixedWidth / oriWidth;
+end
+
+% 画像を指定した解像度にリサイズ
+resizedI = imresize(oriI, scaleFactor);
+%figure, imshow(resizedI);
+
+%% グレイスケール化
+% 以降で輝度を基に画像を変換する
+grayI = rgb2gray(resizedI);
+%figure, imshow(grayI);
+
+%% 平滑化
+% メディアンフィルタをかける
+filteredI = medfilt2(grayI, [3 3]);
+%figure, imshow(filteredI);
+
+%% ポスタリゼーション
+% 計算のためにダブル型に変換
+I = double(filteredI);
+% 画像のサイズを取得
+[height, width] = size(I);
+% 出力画像を初期化 (モノクロ画像)
+reducedI = zeros(height, width);
+% ループで各ピクセルを処理
+for x = 1:width
+    for y = 1:height
+        brightness = I(y, x);
+        if brightness < 45
+            reducedI(y, x) = 15;
+        elseif brightness < 90
+            reducedI(y, x) = 60;
+        elseif brightness < 135
+            reducedI(y, x) = 105;
+        elseif brightness < 180
+            reducedI(y, x) = 135;
+        elseif brightness < 210
+            reducedI(y, x) = 180;
+        else
+            reducedI(y, x) = 210;
+        end
+    end
+end
+reducedI = uint8(reducedI);
+%figure, imshow(reducedI);
+
+%% ベンデイドット化
+I = double(reducedI);
+% 画像のサイズを取得
+[height, width] = size(I);
+% 出力画像を初期化 (モノクロ画像)
+noizedI = zeros(height, width);
+% 8X8ピクセル単位でノイズを付与
+for x = 1:width
+    for y = 1:height
+        noizedI(y, x) = 80 * rem((int16(x/8)+int16(y/8)), 2);
+    end
+end
+noizedI = uint8(noizedI);
+% ガウシアンノイズを付与
+noizedI = imnoise(noizedI,"gaussian");
+% ベンデイドット風変換
+bendeiI = reducedI - 0.5.*noizedI;
+%figure, imshow(bendeiI);
+
+%% グラデーションのカラー変換
+% 計算のためにダブル型に変換
+I = double(bendeiI);
+% 画像のサイズを取得
+[height, width] = size(I);
+% 出力画像を初期化 (カラー画像)
+ryI = zeros(height, width, 3);
+% ループで各ピクセルの輝度を基にカラー変換
+for x = 1:width
+    for y = 1:height
+        brightness = I(y, x);
+        if brightness < 125
+            ryI(y, x, 1) = brightness * 9 / 5 + 30;
+            ryI(y, x, 2) = brightness * 4 / 25 + 60;
+            ryI(y, x, 3) = brightness * 14 / 25 + 50;
+        elseif brightness < 165
+            ryI(y, x, 1) = 255;
+            ryI(y, x, 2) = brightness * 3 / 2 - 215 / 2;
+            ryI(y, x, 3) = brightness * 2 - 130;
+        elseif brightness < 215
+            ryI(y, x, 1) = 255;
+            ryI(y, x, 2) = brightness * 9 / 5 - 157;
+            ryI(y, x, 3) = brightness * (-4) + 960;
+        else
+            ryI(y, x, 1) = 255;
+            ryI(y, x, 2) = brightness / 2 + 245 / 2;
+            ryI(y, x, 3) = 100;
+        end
+    end
+end
+ryI = uint8(ryI);
+figure, imshow(ryI);
+</code>
+                </pre>
+            </div>
             <div class="copyright-text">
                 <p>© Haruya Matsushima</p>
             </div>
@@ -31,6 +155,9 @@
         </div>
 
     </div>
+
+    <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/amroamroamro/prettify-matlab@master/lang-m.js"></script>
 
 </body>
 

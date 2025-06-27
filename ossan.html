@@ -6,19 +6,321 @@
     <title>残業シミュレータ</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="works.css">
+    <link href="https://cdn.jsdelivr.net/gh/amroamroamro/prettify-matlab@master/prettify.css" rel="stylesheet"
+        type="text/css">
 </head>
 
 <body>
-    <div class="fixed-tab-r">              
+    <div class="fixed-tab-r">
         <a href="index.html">HaruyaMatsushima</a>
     </div>
 
     <div class="split-container">
-        
+
         <div class="left-pane">
             <h2>残業シミュレータ</h2>
             <p>残業中のおっさんを叫んで起こすゲーム</p>
             <p>Processingで実装</p>
+            
+            <div class="code-container">
+                <h3>ソースコード (Processing)</h3>
+                <pre class="prettyprint lang-java linenums">
+<code>
+// マイクの音を扱うためのライブラリをインポート
+import processing.sound.*;
+
+// マイク
+AudioIn in;
+// 音量を取得してくれるもの
+Amplitude amp;
+
+float volume = 0.0;
+float sz = 0.0;
+float vol = 0.1;
+
+int idx = 0;
+
+String title = "残業シミュレーター";
+int titleColor = 255;
+int season = 0;
+int pos = -250;
+
+float taskGage = 0.0;
+int taskNumber = 0;
+
+int numberOfOssan = 3;
+int phase[] = new int[numberOfOssan];
+int stress[] = new int[numberOfOssan];
+int tmr[] = new int[numberOfOssan];
+int sleepTime[] = new int[numberOfOssan];
+int sleepCount[] = new int[numberOfOssan];
+boolean isCleared[] = new boolean[numberOfOssan];
+int hy[] = new int[numberOfOssan];
+
+int numberOfImage = 5;
+PImage[] img = new PImage[numberOfImage];
+PImage ozimg;
+PFont font;
+
+int numberOfNames = 10;
+String[] nameLibrary = {"佐藤", "伊藤", "加藤", "後藤", "斎藤"};
+String[] name = new String[numberOfOssan];
+
+String number[] = {"０", "１", "２", "３", "４", "５", "６", "７", "８", "９"};
+
+int isMike = 0;
+
+void setup() {
+  size(1400, 600);
+  frameRate(20);
+
+  // マイクを初期化（おまじない。現時点で深い意味は考えなくてOK）
+  in = new AudioIn(this);
+  in.start();
+
+  // 音量の取得を開始
+  amp = new Amplitude(this);
+  amp.input(in);
+
+  for (int i = 0; i < numberOfImage; i ++) {
+    img[i] = loadImage("hageozi" + i + ".gif");
+  }
+
+  for (int i = 0; i < numberOfOssan; i ++) {
+    stress[i] = 0;
+    tmr[i] = 0;
+    sleepTime[i] = (int)random(40, 160);
+    sleepCount[i] = 0;
+    name[i] = nameLibrary[i];
+    isCleared[i] = false;
+    hy[i] = 0;
+  }
+
+  ozimg = loadImage("baan.png");
+
+  font = createFont("MS P 明朝", 30);
+  textFont(font);
+}
+
+void Beginning() {
+  // マイクの音量を取得して、結果を変数 volume に入れる
+  if (isMike == 0) {
+    volume = amp.analyze();
+    sz = volume * 1000;
+  }
+
+  //title
+  textSize(100);
+  fill(titleColor);
+  text(title, 300, 100 - pos);
+  if (titleColor == 0) {
+    season = 1;
+  }
+
+  if (season == 0) {
+    titleColor -= 5;
+    return;
+  }
+
+  //sentence
+  fill(- pos);
+  strokeWeight(5);
+  stroke(- pos);
+  line(575, 150 - pos * 2, 925, 150 - pos * 2);
+  line(575, 150 - pos * 2, 575, 400 - pos * 2);
+  line(575, 400 - pos * 2, 925, 400 - pos * 2);
+  line(925, 150 - pos * 2, 925, 225 - pos * 2);
+  line(925, 225 - pos * 2, 1000, 275 - pos * 2);
+  line(1000, 275 - pos * 2, 925, 350 - pos * 2);
+  line(925, 350 - pos * 2, 925, 400 - pos * 2);
+  textSize(25);
+  text("私は課長の松島(54)だ\nかわいい部下たちが\n残業中に眠っているようだ。\n優しく声をかけて\n起こしてあげよう。", 600, 200 - pos * 2);
+
+  //face
+  image(ozimg, 1000 - pos * 2, 200, 300, 300);
+  fill(255);
+  noStroke();
+  rect(1100 - pos * 2, 320, 100, 30);
+  stroke(0);
+  ellipse(1150 - pos * 2, 340, 50, sz);
+
+  //button
+  if (idx == 0 && pos + 50 <= mouseX && mouseX <= pos+250 && 50 <= mouseY && mouseY <= 100) {
+    fill(255, 255, 0);
+  } else {
+    fill(150, 255, 100);
+  }
+  rect(50 + pos * 2, 50, 200, 50);
+  textSize(50);
+  fill(0);
+  text("start", 100 + pos * 2, 90);
+  if (pos < 0) {
+    pos += 10;
+  }
+
+  textSize(100);
+  fill(- pos);
+  text("発声練習", 100 + pos * 2, 550);
+
+  strokeWeight(2);
+  stroke(255, 0, 0);
+  noFill();
+  circle(300 + pos * 2, height / 2, vol * 2000);
+  fill(255, 200, 100);
+  stroke(0);
+  circle(300 + pos * 2, height / 2, sz);
+
+  textSize(20);
+  fill(0, 0, 100);
+  text("created by PI.haruya & @OTUNEKO1", width-400, height-25);
+}
+
+void Playing() {
+  // マイクの音量を取得して、結果を変数 volume に入れる
+  if (isMike == 0) {
+    volume = amp.analyze();
+  }
+
+  for (int i = 0; i < numberOfOssan; i ++) {
+    if (isCleared[i]) {
+      image(img[4], 400 *i, hy[i]+50, 400, 350);
+      hy[i] -= 3;
+    }
+    //working
+    if (phase[i] == 0) {
+      image(img[0], 400 * i, 250, 400, 350);
+      sleepCount[i] ++;
+      taskGage += 0.5;
+      if (sleepCount[i] == sleepTime[i]) {
+        phase[i] = 1;
+      }
+      if (taskGage % 360 == 0) {
+        taskNumber ++;
+      }
+    }
+    //sleeping
+    else if (phase[i] == 1) {
+      image(img[1], 400 * i, 250, 400, 350);
+      if (0 < stress[i]) {
+        stress[i] --;
+      }
+    }
+    //surprising
+    else if (phase[i] == 2) {
+      if (isCleared[i] == false) {
+        image(img[4], 400 * i, 0, 400, 350);
+      }
+      image(img[2], 400 * i, 250, 400, 350);
+      tmr[i] ++;
+      if (tmr[i] == 1) {
+        stress[i] += 100;
+        if (stress[i] >= 255) {
+          stress[i] = 255;
+        }
+      } else if (tmr[i] == 20) {
+        phase[i] = 0;
+        tmr[i] = 0;
+        sleepTime[i] = (int)random(40, 160);
+        sleepCount[i] = 0;
+        if (stress[i] == 255) {
+          phase[i] = 3;
+        }
+      }
+    }
+    //exhausting
+    else if (phase[i] == 3) {
+      image(img[3], 400 * i, 250, 400, 350);
+    }
+
+    if (volume > vol && tmr[i] == 0) {
+      phase[i] = 2;
+      if (stress[i] >= 155) {
+        isCleared[i] = true;
+      }
+    }
+
+    //name
+    stroke(0);
+    strokeWeight(2);
+    fill(255);
+    rect(400*i+50, height-75, 100, 60);
+    fill(0);
+    textSize(50);
+    text(name[i], 400*i+50, height-25);
+
+    //stress
+    fill(255);
+    rect(400 *i + 50, 220, 50, 255);
+    textSize(35);
+    fill(stress[i], 255 - stress[i], 0);
+    rect(400 * i + 50, 475, 50, -stress[i]);
+    fill(100);
+    text("ス\nト\nレ\nス", 400 * i + 55, 270);
+  }
+
+  //taskMater
+  fill(255);
+  rect(1250, 200, 100, 360);
+  fill(255, 255, 0);
+  rect(1250, 560, 100, -taskGage % 360);
+  fill(0);
+  text("タ\nス\nク\n" + number[taskNumber + 1], 1200, 300);
+
+  //clock
+  noFill();
+  circle(1300, 100, 160);
+  circle(1300, 100, 150);
+  line(1300, 100, 1300 + 40 * cos(radians(frameCount)), 100 + 40 * sin(radians(frameCount)));
+  line(1300, 100, 1300 + 65 * cos(radians(frameCount) * 60), 100 + 50 * sin(radians(frameCount) * 60));
+  textSize(20);
+  fill(0);
+  text("12", 1290, 50);
+  text("3", 1350, 110);
+  text("6", 1295, 165);
+  text("9", 1240, 110);
+
+
+  strokeWeight(5);
+  textSize(25);
+  text("Mike", 50, 45);
+  textSize(50);
+  if (isMike == 0) {
+    fill(255);
+    rect(50, 50, 100, 50);
+    fill(0);
+    text("ON", 65, 95);
+  }
+  if (isMike == 1) {
+    fill(0);
+    rect(50, 50, 100, 50);
+    fill(255);
+    text("OFF", 50, 95);
+  }
+}
+
+void draw() {
+  background(255);
+
+  if (idx == 0) {
+    Beginning();
+  }
+
+  if (idx == 1) {
+    Playing();
+  }
+}
+
+void mousePressed() {
+  if (idx == 1 && 50 < mouseX && mouseX < 150 && 50 < mouseY && mouseY < 100) {
+    isMike = 1 - isMike;
+  }
+  if (idx == 0 && pos + 50 <= mouseX && mouseX <= pos+250 && 50 <= mouseY && mouseY <= 100) {
+    idx = 1;
+  }
+}
+</code>
+                </pre>
+            </div>
             <div class="copyright-text">
                 <p>© Haruya Matsushima</p>
             </div>
@@ -31,6 +333,8 @@
         </div>
 
     </div>
+
+    <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
 
 </body>
 

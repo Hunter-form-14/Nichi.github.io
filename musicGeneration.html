@@ -6,15 +6,16 @@
     <title>動画同期音楽生成</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="works.css">
+    <link href="https://cdn.jsdelivr.net/gh/amroamroamro/prettify-matlab@master/prettify.css" rel="stylesheet" type="text/css">
 </head>
 
 <body>
-    <div class="fixed-tab-r">              
+    <div class="fixed-tab-r">
         <a href="index.html">HaruyaMatsushima</a>
     </div>
 
     <div class="split-container">
-        
+
         <div class="left-pane">
             <h2>動画同期音楽生成</h2>
             <p>過去に行った研究</p>
@@ -23,6 +24,189 @@
             <p>「トンビにカメパンぬすまれた」</p>
             <br>
             <a href="pdf/musicGeneration.pdf" class="play-button">pdf</a>
+            
+            <div class="code-container">
+                <h3>ソースコード (Python)</h3>
+                <pre class="prettyprint lang-py linenums">
+<code>
+import os
+import time
+import numpy as np
+import cv2
+from moviepy.editor import VideoFileClip, AudioFileClip, CompositeAudioClip
+from midi2audio import FluidSynth
+from magenta.models.performance_rnn import performance_sequence_generator
+from magenta.models.shared import sequence_generator_bundle
+from note_seq.protobuf import generator_pb2
+from note_seq.protobuf import music_pb2
+import note_seq
+import tensorflow.compat.v1 as tf
+tf.disable_v2_behavior()
+
+import cv2
+import numpy as np
+import matplotlib.pyplot as plt
+import pretty_midi
+
+def analyze_video_dynamics(video_path, skip_frames=10):
+    cap = cv2.VideoCapture(video_path)
+
+    # Optical Flow 設定
+    ret, frame1 = cap.read()
+    prev_gray = cv2.cvtColor(frame1, cv2.COLOR_BGR2GRAY)
+    hsv = np.zeros_like(frame1)
+    hsv[..., 1] = 255
+
+    dynamics = []
+    frame_count = 0
+
+    while cap.isOpened():
+        ret, frame2 = cap.read()
+        if not ret:
+            break
+
+        gray = cv2.cvtColor(frame2, cv2.COLOR_BGR2GRAY)
+
+        # 指定したフレーム間隔で処理を行う
+        if frame_count % skip_frames == 0:
+            flow = cv2.calcOpticalFlowFarneback(prev_gray, gray, None, 0.5, 3, 15, 3, 5, 1.2, 0)
+            mag, ang = cv2.cartToPolar(flow[..., 0], flow[..., 1])
+            dynamics.append(np.mean(mag))
+
+        prev_gray = gray
+        frame_count += 1
+
+    cap.release()
+
+    # ダイナミクスの正規化
+    normalized_dynamics = np.interp(dynamics, (np.min(dynamics), np.max(dynamics)), (0.2, 0.8))
+
+    # グラフの描画
+    plt.figure(figsize=(12, 6))
+    plt.plot(range(0, len(normalized_dynamics) * skip_frames, skip_frames), normalized_dynamics)
+    plt.title("analysis")
+    plt.xlabel("frame")
+    plt.ylabel("intensity")
+    plt.grid(True)
+    plt.show()
+
+    return normalized_dynamics
+
+# 音楽生成（Multiconditioned Performance with Dynamics）
+def generate_music_with_multiconditioned_model(dynamics, sequence_generator, total_duration):
+    if len(dynamics) == 0:
+        raise ValueError("ダイナミクスのデータが空です。動画の解析に問題がある可能性があります。")
+
+    # 初期の音楽シーケンス (primer_sequence) の作成
+    primer_sequence = music_pb2.NoteSequence()
+    primer_sequence.ticks_per_quarter = note_seq.STANDARD_PPQ
+
+    # 動画のダイナミクスに基づく初期音符の設定
+    segment_duration = total_duration / len(dynamics)
+    for i, dynamic in enumerate(dynamics):
+        start_time = i * segment_duration
+        end_time = start_time + segment_duration
+        pitch = int(60 + 20 * dynamic)  # 動きに基づく音高
+        primer_sequence.notes.add(
+            pitch=pitch,
+            start_time=start_time,
+            end_time=end_time,
+            velocity=int(63+dynamic * 64)
+        )
+        primer_sequence.total_time = end_time
+
+    # 生成オプションの設定
+    generator_options = generator_pb2.GeneratorOptions()
+
+    # 生成セクションの設定 (primer_sequence の終了時点から開始)
+    generate_section = generator_options.generate_sections.add(
+        start_time=primer_sequence.total_time,
+        end_time=total_duration
+    )
+
+    # パラメータの設定
+    generator_options.args['temperature'].float_value = 1.0  # ランダム性
+    generator_options.args['density'].float_value = 0.8    # 密度
+
+    # 音楽の生成
+    generated_sequence = sequence_generator.generate(primer_sequence, generator_options)
+
+    return generated_sequence
+
+def display_midi_content(midi_file_path):
+    # MIDIファイルを読み込む
+    midi_data = pretty_midi.PrettyMIDI(midi_file_path)
+
+    # ピアノロールを取得
+    piano_roll = midi_data.get_piano_roll()
+
+    # プロットの設定
+    plt.figure(figsize=(12, 6))
+    plt.imshow(piano_roll, aspect='auto', origin='lower', cmap='Blues')
+    plt.title('MIDI File Piano Roll')
+    plt.xlabel('Time (steps)')
+    plt.ylabel('Pitch')
+    plt.colorbar(label='Velocity')
+
+    # Y軸のラベルを設定（C4 = MIDI note 60）
+    pitches = np.arange(0, 128, 12)
+    pitch_names = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B']
+    plt.yticks(pitches, [f'{pitch_names[p%12]}{p//12-1}' for p in pitches])
+
+    plt.show()
+
+# 音楽をMIDI/WAV形式で保存
+def save_music_to_wav(note_sequence, output_midi, output_wav, soundfont_path):
+    note_seq.sequence_proto_to_midi_file(note_sequence, output_midi)
+    fs = FluidSynth(soundfont_path)
+    fs.midi_to_audio(output_midi, output_wav)
+
+# 動画と音楽を統合
+def integrate_audio_with_video(video_path, audio_path, output_path):
+    video = VideoFileClip(video_path)
+    audio = AudioFileClip(audio_path)
+    new_audio = CompositeAudioClip([audio])
+    video = video.set_audio(new_audio)
+    video.write_videofile(output_path, codec='libx264', audio_codec='aac')
+
+# メイン処理
+def main():
+    video_path = "/content/drive/MyDrive/Colab Notebooks/CatFight.mp4"
+    output_midi_path = "/content/drive/MyDrive/Colab Notebooks/generated_music.mid"
+    output_audio_path = "/content/drive/MyDrive/Colab Notebooks/generated_music.wav"
+    output_video_path = "/content/drive/MyDrive/Colab Notebooks/output_video.mp4"
+    soundfont_path = "/content/drive/MyDrive/Colab Notebooks/FluidR3_GM.sf2"
+    model_bundle_path = "/content/drive/MyDrive/Colab Notebooks/multiconditioned_performance_with_dynamics.mag"
+
+    # モデルのロード
+    bundle = sequence_generator_bundle.read_bundle_file(model_bundle_path)
+    generator_map = performance_sequence_generator.get_generator_map()
+    sequence_generator = generator_map['multiconditioned_performance_with_dynamics'](bundle=bundle)
+    sequence_generator.initialize()
+
+    # 1. 動画の盛り上がり解析
+    dynamics = analyze_video_dynamics(video_path)
+
+    # 2. 音楽の生成
+    video = VideoFileClip(video_path)
+    generated_sequence = generate_music_with_multiconditioned_model(dynamics, sequence_generator, video.duration)
+
+    # MIDIファイルの内容を表示
+    display_midi_content(output_midi_path)
+
+    # 3. 音楽を保存
+    save_music_to_wav(generated_sequence, output_midi_path, output_audio_path, soundfont_path)
+
+    # 4. 動画と音楽を統合
+    integrate_audio_with_video(video_path, output_audio_path, output_video_path)
+
+    print(f"生成された動画: {output_video_path}")
+
+if __name__ == "__main__":
+    main()
+</code>
+                </pre>
+            </div>
             <div class="copyright-text">
                 <p>© Haruya Matsushima</p>
             </div>
@@ -38,6 +222,9 @@
         </div>
 
     </div>
+
+    <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/lang-py.js"></script>
 
 </body>
 
