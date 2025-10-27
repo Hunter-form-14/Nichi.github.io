@@ -1,0 +1,1121 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <title>動画同期音楽生成</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="works.css">
+    <link href="https://cdn.jsdelivr.net/gh/amroamroamro/prettify-matlab@master/prettify.css" rel="stylesheet"
+        type="text/css">
+</head>
+
+<body>
+    <div class="fixed-tab-r">
+        <a href="index.html">HaruyaMatsushima</a>
+    </div>
+
+    <div class="split-container">
+
+        <div class="left-pane">
+            <h2>StyleDrop</h2>
+            <p>画像編集アプリ</p>
+            <p>JavaScriptで実装</p>
+            <br>
+            <a href="pdf/musicGeneration.pdf" class="play-button">詳細</a>
+
+            <div class="code-container">
+                <h3>ソースコード (JavaScript)</h3>
+                <pre class="prettyprint lang-py linenums">
+<code>
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StyleDrop - Virtual Try-On</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            display: flex;
+            gap: 20px;
+            max-width: 1400px;
+            margin: 0 auto;
+            height: calc(100vh - 40px);
+        }
+
+        .palette {
+            flex: 0 0 350px;
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            overflow-y: auto;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .palette h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+
+        .category {
+            margin-bottom: 25px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
+
+        .category h3 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 16px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .input-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        input[type="text"] {
+            flex: 1;
+            padding: 10px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+
+        input[type="text"]:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        input[type="file"] {
+            display: none;
+        }
+
+        button {
+            padding: 10px 20px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+            transition: background 0.3s;
+        }
+
+        button:hover {
+            background: #5568d3;
+        }
+
+        button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 10px;
+        }
+
+        .generated-items {
+            display: flex;
+            flex-direction: row;
+            gap: 10px;
+            margin-top: 10px;
+            overflow-x: auto;
+            overflow-y: hidden;
+            padding-bottom: 10px;
+        }
+
+        .generated-items::-webkit-scrollbar {
+            height: 8px;
+        }
+
+        .generated-items::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 4px;
+        }
+
+        .generated-items::-webkit-scrollbar-thumb {
+            background: #667eea;
+            border-radius: 4px;
+        }
+
+        .generated-items::-webkit-scrollbar-thumb:hover {
+            background: #5568d3;
+        }
+
+        .item-thumbnail {
+            flex-shrink: 0;
+            width: 120px;
+            height: 120px;
+            object-fit: cover;
+            border-radius: 8px;
+            cursor: grab;
+            border: 2px solid transparent;
+            transition: all 0.3s;
+        }
+
+        .item-thumbnail:hover {
+            transform: scale(1.05);
+            border-color: #667eea;
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .item-thumbnail:active {
+            cursor: grabbing;
+        }
+
+        .main-area {
+            flex: 1;
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .controls {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .controls h1 {
+            color: #333;
+            font-size: 28px;
+        }
+
+        #changeBase,
+        #uploadBase,
+        #saveImage {
+            padding: 12px 24px;
+            font-size: 16px;
+        }
+
+        #uploadBase {
+            background: #28a745;
+        }
+
+        #uploadBase:hover {
+            background: #218838;
+        }
+
+        .canvas-container {
+            position: relative;
+            width: 600px;
+            height: 600px;
+            border: 3px dashed #ddd;
+            border-radius: 15px;
+            overflow: hidden;
+            background: #fafafa;
+            transition: all 0.3s;
+        }
+
+        .canvas-container.drag-over {
+            border-color: #667eea;
+            background: #f0f4ff;
+        }
+
+        #baseCanvas {
+            width: 100%;
+            height: 100%;
+        }
+
+        .empty-state {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            color: #999;
+            pointer-events: none;
+            z-index: 5;
+        }
+
+        .empty-state.hidden {
+            display: none;
+        }
+
+        .empty-state h3 {
+            font-size: 24px;
+            color: #667eea;
+            margin-bottom: 15px;
+        }
+
+        .empty-state p {
+            font-size: 16px;
+            color: #666;
+            margin-bottom: 8px;
+        }
+
+        .position-indicator {
+            position: absolute;
+            width: 80px;
+            height: 80px;
+            border: 3px solid #28a745;
+            border-radius: 50%;
+            background: rgba(40, 167, 69, 0.2);
+            pointer-events: none;
+            display: none;
+            transform: translate(-50%, -50%);
+            z-index: 20;
+        }
+
+        .position-indicator.show {
+            display: block;
+            animation: pulse 0.5s ease-in-out;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                transform: translate(-50%, -50%) scale(1);
+            }
+
+            50% {
+                transform: translate(-50%, -50%) scale(1.2);
+            }
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 20px;
+            color: #667eea;
+            font-weight: bold;
+        }
+
+        .loading.show {
+            display: block;
+        }
+
+        .api-key-setup {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .api-key-dialog {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            max-width: 500px;
+            width: 90%;
+        }
+
+        .api-key-dialog h2 {
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .api-key-dialog input {
+            width: 100%;
+            margin-bottom: 20px;
+        }
+
+        .info-box {
+            background: #e3f2fd;
+            border-left: 4px solid #2196f3;
+            padding: 15px;
+            margin-top: 20px;
+            border-radius: 5px;
+        }
+
+        .info-box h4 {
+            color: #1976d2;
+            margin-bottom: 8px;
+        }
+
+        .info-box p {
+            color: #555;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .detection-status {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 10px 15px;
+            border-radius: 8px;
+            font-size: 13px;
+            color: #333;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            display: none;
+            z-index: 25;
+            border-left: 4px solid #28a745;
+        }
+
+        .detection-status.show {
+            display: block;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="apiKeySetup" class="api-key-setup">
+        <div class="api-key-dialog">
+            <h2>StyleDrop</h2>
+            <button onclick="setApiKey()">開始</button>
+            <div class="info-box">
+                <h4>💡 画像ベース着せ替えアプリ</h4>
+                <p>生成されたアイテム画像を直接AIに送信することで、デザインや柄を正確に反映した着せ替えを実現します。</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="palette">
+            <h2>🎨 衣装パレット</h2>
+
+            <div class="category" data-category="tops">
+                <h3>👕 トップス</h3>
+                <div class="input-group">
+                    <input type="text" placeholder="例: 白いTシャツ">
+                    <button onclick="generateItems('tops', this)">生成</button>
+                </div>
+                <div class="loading">生成中...</div>
+                <div class="generated-items"></div>
+            </div>
+
+            <div class="category" data-category="bottoms">
+                <h3>👖 ボトムス</h3>
+                <div class="input-group">
+                    <input type="text" placeholder="例: 青いジーンズ">
+                    <button onclick="generateItems('bottoms', this)">生成</button>
+                </div>
+                <div class="loading">生成中...</div>
+                <div class="generated-items"></div>
+            </div>
+
+            <div class="category" data-category="shoes">
+                <h3>👟 シューズ</h3>
+                <div class="input-group">
+                    <input type="text" placeholder="例: 白いスニーカー">
+                    <button onclick="generateItems('shoes', this)">生成</button>
+                </div>
+                <div class="loading">生成中...</div>
+                <div class="generated-items"></div>
+            </div>
+
+            <div class="category" data-category="accessories">
+                <h3>💎 アクセサリー</h3>
+                <div class="input-group">
+                    <input type="text" placeholder="例: サングラス">
+                    <button onclick="generateItems('accessories', this)">生成</button>
+                </div>
+                <div class="loading">生成中...</div>
+                <div class="generated-items"></div>
+            </div>
+        </div>
+
+        <div class="main-area">
+            <div class="controls">
+                <h1>StyleDrop</h1>
+                <div class="button-group">
+                    <button id="changeBase" onclick="changeBaseImage()">AI生成</button>
+                    <button id="uploadBase" onclick="triggerUpload()">アップロード</button>
+                    <button id="saveImage" onclick="saveImage()">保存</button>
+                </div>
+            </div>
+            <input type="file" id="fileInput" accept="image/*" onchange="handleFileSelect(event)">
+            <div class="canvas-container" id="dropZone">
+                <canvas id="baseCanvas" width="600" height="600"></canvas>
+                <div class="position-indicator" id="positionIndicator"></div>
+                <div class="detection-status" id="detectionStatus"></div>
+                <div class="empty-state" id="emptyState">
+                    <h3>👤 ベース画像を選択</h3>
+                    <p>「AI生成」ボタンで人物を生成</p>
+                    <p>または「アップロード」ボタンで選択</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        let GEMINI_API_KEY = '';
+        let baseImage = null;
+        let detectedPersons = [];
+        const canvas = document.getElementById('baseCanvas');
+        const ctx = canvas.getContext('2d');
+        const appliedItems = new Map();
+        const emptyState = document.getElementById('emptyState');
+        const positionIndicator = document.getElementById('positionIndicator');
+        const detectionStatus = document.getElementById('detectionStatus');
+
+        function showDetectionStatus(message) {
+            detectionStatus.textContent = message;
+            detectionStatus.classList.add('show');
+            setTimeout(() => {
+                detectionStatus.classList.remove('show');
+            }, 3000);
+        }
+
+        window.setApiKey = function () {
+            GEMINI_API_KEY = 'AIzaSyBaoVk5Qn1X5PqQZAuADeNUrKIZ9lbPuAY';
+            if (GEMINI_API_KEY) {
+                document.getElementById('apiKeySetup').style.display = 'none';
+            }
+        };
+
+        async function generateBaseImage() {
+            const prompt = "Three friends walking together outdoors, candid street photography style, natural sunlight, casual everyday clothing, dynamic poses with slight movement, depth of field with background slightly blurred, photorealistic, authentic moment, genuine expressions, urban or park setting, natural colors, professional photography";
+
+            try {
+                const imageData = await callGeminiAPI(prompt);
+                await loadImageToCanvas(imageData, true);
+                emptyState.classList.add('hidden');
+                await detectPersons();
+            } catch (error) {
+                console.error('ベース画像生成エラー:', error);
+                alert('ベース画像の生成に失敗しました: ' + error.message);
+            }
+        }
+
+
+        window.changeBaseImage = async function () {
+            const button = document.getElementById('changeBase');
+            button.disabled = true;
+            button.textContent = '生成中...';
+
+            await generateBaseImage();
+            appliedItems.clear();
+
+            button.disabled = false;
+            button.textContent = 'AI生成';
+        };
+
+        window.triggerUpload = function () {
+            document.getElementById('fileInput').click();
+        };
+
+        window.handleFileSelect = async function (event) {
+            const file = event.target.files[0];
+            if (file && file.type.match(/^image\/(png|jpeg|jpg|gif|webp)$/)) {
+                await loadLocalImage(file);
+                await detectPersons();
+            } else {
+                alert('画像ファイルを選択してください（PNG, JPEG, GIF, WebP）');
+            }
+        };
+
+        async function loadLocalImage(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+
+                reader.onload = (event) => {
+                    const img = new Image();
+                    img.onload = () => {
+                        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+                        const scale = Math.min(canvas.width / img.width, canvas.height / img.height);
+                        const x = (canvas.width - img.width * scale) / 2;
+                        const y = (canvas.height - img.height * scale) / 2;
+
+                        ctx.drawImage(img, x, y, img.width * scale, img.height * scale);
+                        baseImage = canvas.toDataURL('image/png');
+                        appliedItems.clear();
+                        emptyState.classList.add('hidden');
+                        resolve();
+                    };
+                    img.onerror = reject;
+                    img.src = event.target.result;
+                };
+
+                reader.onerror = reject;
+                reader.readAsDataURL(file);
+            });
+        }
+
+        async function detectPersons() {
+            if (!baseImage) return;
+
+            try {
+                showDetectionStatus('人物を検出中...');
+
+                const prompt = `CRITICAL TASK: Detect ALL persons in this image with MAXIMUM precision.
+
+STRICT REQUIREMENTS:
+1. Identify EVERY person visible, ordered from LEFT to RIGHT
+2. Provide TIGHT bounding boxes (minimum padding around each person)
+3. Coordinates MUST be normalized to 0-1000 range
+4. Each person MUST have unique, non-overlapping coordinates
+
+OUTPUT FORMAT (STRICT JSON):
+[
+  {
+    "person_id": 1,
+    "label": "Person 1 (leftmost)",
+    "horizontal_center": 167,
+    "box_2d": [ymin, xmin, ymax, xmax]
+  },
+  {
+    "person_id": 2,
+    "label": "Person 2 (center)",
+    "horizontal_center": 500,
+    "box_2d": [ymin, xmin, ymax, xmax]
+  }
+]
+
+VALIDATION RULES:
+- ymin < ymax (ALWAYS)
+- xmin < xmax (ALWAYS)
+- All values: 0 ≤ value ≤ 1000
+- horizontal_center = (xmin + xmax) / 2
+- No bounding box overlap between persons
+- Order by horizontal_center (ascending)
+
+Return ONLY valid JSON. No markdown, no explanation.`;
+
+                const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-exp:generateContent?key=${GEMINI_API_KEY}`;
+
+                const response = await fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        contents: [{
+                            parts: [
+                                { text: prompt },
+                                {
+                                    inline_data: {
+                                        mime_type: "image/png",
+                                        data: baseImage.split(',')[1]
+                                    }
+                                }
+                            ]
+                        }],
+                        generationConfig: {
+                            temperature: 0.05,
+                            topP: 0.9,
+                            topK: 20
+                        }
+                    })
+                });
+
+                const data = await response.json();
+                console.log('Person Detection Response:', data);
+
+                if (data.candidates && data.candidates[0]?.content?.parts) {
+                    let textContent = data.candidates[0].content.parts[0].text;
+
+                    textContent = textContent.trim();
+                    textContent = textContent.replace(/``````\s*/g, '');
+
+                    const arrayStart = textContent.indexOf('[');
+                    const arrayEnd = textContent.lastIndexOf(']');
+
+                    if (arrayStart !== -1 && arrayEnd !== -1 && arrayEnd > arrayStart) {
+                        textContent = textContent.substring(arrayStart, arrayEnd + 1);
+                    }
+
+                    try {
+                        const detectionResult = JSON.parse(textContent);
+
+                        if (Array.isArray(detectionResult)) {
+                            detectedPersons = detectionResult.filter(person => {
+                                if (!person.box_2d || !Array.isArray(person.box_2d) || person.box_2d.length !== 4) {
+                                    return false;
+                                }
+
+                                const [ymin, xmin, ymax, xmax] = person.box_2d;
+
+                                if (ymin >= ymax || xmin >= xmax) {
+                                    console.warn(`Invalid box: [${ymin}, ${xmin}, ${ymax}, ${xmax}]`);
+                                    return false;
+                                }
+
+                                if (ymin < 0 || xmin < 0 || ymax > 1000 || xmax > 1000) {
+                                    console.warn(`Out of range: [${ymin}, ${xmin}, ${ymax}, ${xmax}]`);
+                                    return false;
+                                }
+
+                                return true;
+                            });
+
+                            detectedPersons.sort((a, b) => {
+                                const centerA = a.horizontal_center || (a.box_2d[1] + a.box_2d[3]) / 2;
+                                const centerB = b.horizontal_center || (b.box_2d[1] + b.box_2d[3]) / 2;
+                                return centerA - centerB;
+                            });
+
+                            if (detectedPersons.length > 0) {
+                                showDetectionStatus(`${detectedPersons.length}人を検出しました`);
+                                console.log('Detected persons:', detectedPersons);
+                            } else {
+                                createFallbackDetection();
+                            }
+                        } else {
+                            createFallbackDetection();
+                        }
+                    } catch (parseError) {
+                        console.error('JSON Parse Error:', parseError);
+                        createFallbackDetection();
+                    }
+                } else {
+                    createFallbackDetection();
+                }
+            } catch (error) {
+                console.error('人物検出エラー:', error);
+                createFallbackDetection();
+            }
+        }
+
+        function createFallbackDetection() {
+            detectedPersons = [
+                {
+                    person_id: 1,
+                    label: "左側エリア",
+                    horizontal_center: 167,
+                    box_2d: [50, 0, 950, 333]
+                },
+                {
+                    person_id: 2,
+                    label: "中央エリア",
+                    horizontal_center: 500,
+                    box_2d: [50, 333, 950, 666]
+                },
+                {
+                    person_id: 3,
+                    label: "右側エリア",
+                    horizontal_center: 833,
+                    box_2d: [50, 666, 950, 1000]
+                }
+            ];
+            showDetectionStatus('3つのエリアに分割しました');
+            console.log('Using fallback detection');
+        }
+
+        async function callGeminiAPI(prompt, includeBaseImage = false) {
+            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-image:generateContent?key=${GEMINI_API_KEY}`;
+
+            const parts = [{ text: prompt }];
+
+            if (includeBaseImage && baseImage) {
+                parts.push({
+                    inline_data: {
+                        mime_type: "image/png",
+                        data: baseImage.split(',')[1]
+                    }
+                });
+            }
+
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    contents: [{
+                        parts: parts
+                    }]
+                })
+            });
+
+            if (!response.ok) {
+                const errorText = await response.text();
+                throw new Error(`API Error: ${response.status} - ${errorText}`);
+            }
+
+            const data = await response.json();
+
+            if (!data.candidates || data.candidates.length === 0) {
+                throw new Error('レスポンスに候補が含まれていません');
+            }
+
+            const candidate = data.candidates[0];
+
+            if (!candidate.content || !candidate.content.parts) {
+                throw new Error('レスポンスの構造が不正です');
+            }
+
+            for (const part of candidate.content.parts) {
+                if (part.inline_data && part.inline_data.data) {
+                    return part.inline_data.data;
+                }
+                if (part.inlineData && part.inlineData.data) {
+                    return part.inlineData.data;
+                }
+            }
+
+            throw new Error('画像データが見つかりません');
+        }
+
+        window.generateItems = async function (category, button) {
+            const categoryDiv = button.closest('.category');
+            const input = categoryDiv.querySelector('input');
+            const description = input.value.trim();
+
+            if (!description) {
+                alert('説明を入力してください');
+                return;
+            }
+
+            const loading = categoryDiv.querySelector('.loading');
+            const itemsContainer = categoryDiv.querySelector('.generated-items');
+
+            button.disabled = true;
+            loading.classList.add('show');
+
+            try {
+                // 並列処理：3つのAPI呼び出しを同時実行
+                const promises = [];
+                for (let i = 0; i < 3; i++) {
+                    const prompt = `Professional product photo of ${description}. Clean white background, centered, e-commerce style, no human model, high quality. Variation ${i + 1}.`;
+                    promises.push(callGeminiAPI(prompt, false));
+                }
+
+                // すべてのAPI呼び出しが完了するまで待つ
+                const imageDataArray = await Promise.all(promises);
+
+                // 画像を逆順で追加（最新が左端に来るように）
+                imageDataArray.reverse().forEach((imageData) => {
+                    const src = `data:image/png;base64,${imageData}`;
+                    const img = document.createElement('img');
+                    img.src = src;
+                    img.className = 'item-thumbnail';
+                    img.draggable = true;
+                    img.dataset.category = category;
+                    img.dataset.description = description;
+                    img.dataset.itemImage = src;
+
+                    img.addEventListener('dragstart', handleDragStart);
+
+                    itemsContainer.insertBefore(img, itemsContainer.firstChild);
+                });
+
+                itemsContainer.scrollLeft = 0;
+
+            } catch (error) {
+                console.error('生成エラー:', error);
+                alert('アイテムの生成に失敗しました: ' + error.message);
+            } finally {
+                button.disabled = false;
+                loading.classList.remove('show');
+            }
+        };
+
+        function handleDragStart(e) {
+            e.dataTransfer.effectAllowed = 'copy';
+            e.dataTransfer.setData('application/json', JSON.stringify({
+                type: 'clothing-item',
+                src: e.target.src,
+                category: e.target.dataset.category,
+                description: e.target.dataset.description,
+                itemImage: e.target.dataset.itemImage
+            }));
+        }
+
+        const dropZone = document.getElementById('dropZone');
+
+        dropZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            const types = e.dataTransfer.types;
+            if (types.includes('application/json')) {
+                e.dataTransfer.dropEffect = 'copy';
+                dropZone.classList.add('drag-over');
+            }
+        });
+
+        dropZone.addEventListener('dragleave', () => {
+            dropZone.classList.remove('drag-over');
+        });
+
+        dropZone.addEventListener('drop', async (e) => {
+            e.preventDefault();
+            dropZone.classList.remove('drag-over');
+
+            const rect = dropZone.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+
+            console.log(`Drop at canvas position: (${x}, ${y})`);
+
+            positionIndicator.style.left = `${x}px`;
+            positionIndicator.style.top = `${y}px`;
+            positionIndicator.classList.add('show');
+
+            setTimeout(() => {
+                positionIndicator.classList.remove('show');
+            }, 500);
+
+            try {
+                const jsonData = e.dataTransfer.getData('application/json');
+                if (jsonData) {
+                    const data = JSON.parse(jsonData);
+                    if (data.type === 'clothing-item') {
+                        if (!baseImage) {
+                            alert('まずベース画像を設定してください');
+                            return;
+                        }
+
+                        const targetPerson = findPersonAtPosition(x, y);
+                        if (targetPerson) {
+                            console.log('Target person found:', targetPerson);
+                            data.targetPerson = targetPerson;
+                            await applyItemToBase(data);
+                        } else {
+                            alert('この位置に人物が検出されませんでした');
+                        }
+                    }
+                }
+            } catch (error) {
+                console.error('ドロップエラー:', error);
+            }
+        });
+
+        function findPersonAtPosition(x, y) {
+            console.log(`Finding person at: (${x}, ${y})`);
+            console.log(`Total persons detected: ${detectedPersons.length}`);
+
+            let closestPerson = null;
+            let minDistance = Infinity;
+
+            for (let i = 0; i < detectedPersons.length; i++) {
+                const person = detectedPersons[i];
+                const [ymin, xmin, ymax, xmax] = person.box_2d;
+
+                const x1 = (xmin / 1000) * 600;
+                const y1 = (ymin / 1000) * 600;
+                const x2 = (xmax / 1000) * 600;
+                const y2 = (ymax / 1000) * 600;
+
+                console.log(`Person ${i + 1} box: [${x1.toFixed(1)}, ${y1.toFixed(1)}, ${x2.toFixed(1)}, ${y2.toFixed(1)}]`);
+
+                const isInside = x >= x1 && x <= x2 && y >= y1 && y <= y2;
+
+                if (isInside) {
+                    console.log(`✓ Position is INSIDE Person ${i + 1}`);
+                    return person;
+                }
+
+                const centerX = (x1 + x2) / 2;
+                const centerY = (y1 + y2) / 2;
+                const distance = Math.sqrt(Math.pow(x - centerX, 2) + Math.pow(y - centerY, 2));
+
+                console.log(`Distance to Person ${i + 1} center: ${distance.toFixed(1)}`);
+
+                if (distance < minDistance) {
+                    minDistance = distance;
+                    closestPerson = person;
+                }
+            }
+
+            if (closestPerson && minDistance < 150) {
+                console.log(`Using closest person (distance: ${minDistance.toFixed(1)})`);
+                return closestPerson;
+            }
+
+            console.log('✗ No person found at drop position');
+            return null;
+        }
+
+        async function applyItemToBase(itemData) {
+            const person = itemData.targetPerson;
+            const [ymin, xmin, ymax, xmax] = person.box_2d;
+
+            console.log(`Applying item to person with box: [${ymin}, ${xmin}, ${ymax}, ${xmax}]`);
+            console.log(`Person label: ${person.label}, ID: ${person.person_id}`);
+
+            let prompt = `CRITICAL EDITING TASK: Apply clothing item to SPECIFIC person only.
+
+TARGET IDENTIFICATION:
+- Person at bounding box: [${ymin}, ${xmin}, ${ymax}, ${xmax}] (0-1000 normalized)
+- Person label: "${person.label}"
+- Person ID: ${person.person_id}
+
+CLOTHING ITEM:
+- Category: ${itemData.category}
+- The second image shows the exact clothing item to apply
+
+STRICT REQUIREMENTS:
+1. ONLY edit the person within the specified bounding box
+2. Apply the clothing item shown in the second image EXACTLY
+3. Match colors, patterns, textures, and style from the second image
+4. Keep the person's pose, face, and body unchanged
+5. Keep ALL other persons completely unchanged (no modifications whatsoever)
+6. Maintain original background and lighting
+7. Ensure natural fitting and realistic appearance
+8. Preserve image resolution and quality
+
+VALIDATION:
+- Before editing: Identify the target person by bounding box
+- After editing: Verify only the target person was modified
+- Cross-check: No changes to other persons or background
+
+FAILURE MODES TO AVOID:
+- Modifying wrong person
+- Changing multiple persons
+- Altering background
+- Losing image quality
+
+Execute with MAXIMUM precision.`;
+
+            console.log('Sending edit request with prompt:', prompt);
+
+            try {
+                const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-image:generateContent?key=${GEMINI_API_KEY}`;
+
+                const parts = [
+                    { text: prompt },
+                    {
+                        inline_data: {
+                            mime_type: "image/png",
+                            data: baseImage.split(',')[1]
+                        }
+                    },
+                    {
+                        inline_data: {
+                            mime_type: "image/png",
+                            data: itemData.itemImage.split(',')[1]
+                        }
+                    }
+                ];
+
+                const response = await fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        contents: [{
+                            parts: parts
+                        }],
+                        generationConfig: {
+                            temperature: 0.3,
+                            topP: 0.9
+                        }
+                    })
+                });
+
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    throw new Error(`API Error: ${response.status} - ${errorText}`);
+                }
+
+                const data = await response.json();
+                console.log('Edit response received');
+
+                if (!data.candidates || data.candidates.length === 0) {
+                    throw new Error('レスポンスに候補が含まれていません');
+                }
+
+                const candidate = data.candidates[0];
+
+                if (!candidate.content || !candidate.content.parts) {
+                    throw new Error('レスポンスの構造が不正です');
+                }
+
+                let newImageData = null;
+                for (const part of candidate.content.parts) {
+                    if (part.inline_data && part.inline_data.data) {
+                        newImageData = part.inline_data.data;
+                        break;
+                    }
+                    if (part.inlineData && part.inlineData.data) {
+                        newImageData = part.inlineData.data;
+                        break;
+                    }
+                }
+
+                if (!newImageData) {
+                    throw new Error('画像データが見つかりません');
+                }
+
+                await loadImageToCanvas(`data:image/png;base64,${newImageData}`, true);
+                appliedItems.set(itemData.category + '_' + person.person_id, itemData);
+                console.log('Successfully applied item');
+
+            } catch (error) {
+                console.error('適用エラー:', error);
+                alert('アイテムの適用に失敗しました: ' + error.message);
+            }
+        }
+
+        function loadImageToCanvas(src, isBase = false) {
+            return new Promise((resolve) => {
+                const img = new Image();
+                img.onload = () => {
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+
+                    if (isBase) {
+                        baseImage = canvas.toDataURL('image/png');
+                    }
+                    resolve();
+                };
+                img.src = typeof src === 'string' && src.startsWith('data:') ? src : `data:image/png;base64,${src}`;
+            });
+        }
+
+        window.saveImage = function () {
+            if (!baseImage) {
+                alert('保存する画像がありません');
+                return;
+            }
+            const link = document.createElement('a');
+            link.download = `styledrop_${Date.now()}.png`;
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+        };
+    </script>
+</body>
+
+</html>
+</code>
+                </pre>
+            </div>
+            <div class="copyright-text">
+                <p>© Haruya Matsushima</p>
+            </div>
+        </div>
+
+        <div class="right-pane">
+            <img src="jpg/StyleDrop.jpg" alt="StyleDrop" class="content-media">
+        </div>
+
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/lang-py.js"></script>
+
+</body>
+
+</html>
