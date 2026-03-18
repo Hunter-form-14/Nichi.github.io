@@ -10,9 +10,10 @@
 </head>
 
 <body>
-
-    <div class="fixed-tab-r">
-        <a href="index.html">HaruyaMatsushima</a>
+    <div class="fixed-tab-l">
+        <a href="index.html">
+            <span class="main-text">Home</span>
+        </a>
     </div>
 
     <div class="split-container">
@@ -37,46 +38,6 @@ oriI = imread(fullFilePath);
 
 %% 指定の大きさにリサイズ
 % 固定解像度の設定
-fixedHeight = 1024; % 固定する高さ
-fixedWidth = 1024; % 固定する幅
-
-% 画像の縦横比を維持しながらリサイズ
-[oriHeight, oriWidth, ~] = size(oriI);
-if oriHeight > oriWidth
-    scaleFactor = fixedHeight / oriHeight;
-else
-    scaleFactor = fixedWidth / oriWidth;
-end
-
-% 画像を指定した解像度にリサイズ
-resizedI = imresize(oriI, scaleFactor);
-%figure, imshow(resizedI);
-
-%% グレイスケール化
-% 以降で輝度を基に画像を変換する
-grayI = rgb2gray(resizedI);
-%figure, imshow(grayI);
-
-%% 平滑化
-% メディアンフィルタをかける
-filteredI = medfilt2(grayI, [3 3]);
-%figure, imshow(filteredI);
-
-%% ポスタリゼーション
-% 計算のためにダブル型に変換
-I = double(filteredI);
-% 画像のサイズを取得
-[height, width] = size(I);
-% 出力画像を初期化 (モノクロ画像)
-reducedI = zeros(height, width);
-% ループで各ピクセルを処理
-for x = 1:width
-    for y = 1:height
-        brightness = I(y, x);
-        if brightness < 45
-            reducedI(y, x) = 15;
-        elseif brightness < 90
-            reducedI(y, x) = 60;
         elseif brightness < 135
             reducedI(y, x) = 105;
         elseif brightness < 180

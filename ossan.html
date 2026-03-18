@@ -11,8 +11,10 @@
 </head>
 
 <body>
-    <div class="fixed-tab-r">
-        <a href="index.html">HaruyaMatsushima</a>
+    <div class="fixed-tab-l">
+        <a href="index.html">
+            <span class="main-text">Home</span>
+        </a>
     </div>
 
     <div class="split-container">
@@ -36,46 +38,6 @@ Amplitude amp;
 
 float volume = 0.0;
 float sz = 0.0;
-float vol = 0.1;
-
-int idx = 0;
-
-String title = "残業シミュレーター";
-int titleColor = 255;
-int season = 0;
-int pos = -250;
-
-float taskGage = 0.0;
-int taskNumber = 0;
-
-int numberOfOssan = 3;
-int phase[] = new int[numberOfOssan];
-int stress[] = new int[numberOfOssan];
-int tmr[] = new int[numberOfOssan];
-int sleepTime[] = new int[numberOfOssan];
-int sleepCount[] = new int[numberOfOssan];
-boolean isCleared[] = new boolean[numberOfOssan];
-int hy[] = new int[numberOfOssan];
-
-int numberOfImage = 5;
-PImage[] img = new PImage[numberOfImage];
-PImage ozimg;
-PFont font;
-
-int numberOfNames = 10;
-String[] nameLibrary = {"佐藤", "伊藤", "加藤", "後藤", "斎藤"};
-String[] name = new String[numberOfOssan];
-
-String number[] = {"０", "１", "２", "３", "４", "５", "６", "７", "８", "９"};
-
-int isMike = 0;
-
-void setup() {
-  size(1400, 600);
-  frameRate(20);
-
-  // マイクを初期化（おまじない。現時点で深い意味は考えなくてOK）
-  in = new AudioIn(this);
   in.start();
 
   // 音量の取得を開始

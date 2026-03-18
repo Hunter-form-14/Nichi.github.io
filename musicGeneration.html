@@ -10,8 +10,10 @@
 </head>
 
 <body>
-    <div class="fixed-tab-r">
-        <a href="index.html">HaruyaMatsushima</a>
+    <div class="fixed-tab-l">
+        <a href="index.html">
+            <span class="main-text">Home</span>
+        </a>
     </div>
 
     <div class="split-container">
@@ -36,45 +38,6 @@ import cv2
 from moviepy.editor import VideoFileClip, AudioFileClip, CompositeAudioClip
 from midi2audio import FluidSynth
 from magenta.models.performance_rnn import performance_sequence_generator
-from magenta.models.shared import sequence_generator_bundle
-from note_seq.protobuf import generator_pb2
-from note_seq.protobuf import music_pb2
-import note_seq
-import tensorflow.compat.v1 as tf
-tf.disable_v2_behavior()
-
-import cv2
-import numpy as np
-import matplotlib.pyplot as plt
-import pretty_midi
-
-def analyze_video_dynamics(video_path, skip_frames=10):
-    cap = cv2.VideoCapture(video_path)
-
-    # Optical Flow 設定
-    ret, frame1 = cap.read()
-    prev_gray = cv2.cvtColor(frame1, cv2.COLOR_BGR2GRAY)
-    hsv = np.zeros_like(frame1)
-    hsv[..., 1] = 255
-
-    dynamics = []
-    frame_count = 0
-
-    while cap.isOpened():
-        ret, frame2 = cap.read()
-        if not ret:
-            break
-
-        gray = cv2.cvtColor(frame2, cv2.COLOR_BGR2GRAY)
-
-        # 指定したフレーム間隔で処理を行う
-        if frame_count % skip_frames == 0:
-            flow = cv2.calcOpticalFlowFarneback(prev_gray, gray, None, 0.5, 3, 15, 3, 5, 1.2, 0)
-            mag, ang = cv2.cartToPolar(flow[..., 0], flow[..., 1])
-            dynamics.append(np.mean(mag))
-
-        prev_gray = gray
-        frame_count += 1
 
     cap.release()
 

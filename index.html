@@ -4,7 +4,8 @@
 <head>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap"
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Noto+Sans+JP:wght@300;400;500;700&display=swap"
         rel="stylesheet">
 
     <meta charset="UTF-8">
@@ -14,21 +15,17 @@
 </head>
 
 <body>
-    <div class="fixed-tab-r">
-        <a href="#home">HaruyaMatsushima</a>
-    </div>
+    <header class="topbar">
+        <a class="topbar-brand" href="#top">HaruyaMatsushima</a>
+        <nav class="topbar-nav" aria-label="Primary">
+            <a class="topbar-link" href="#top">Top</a>
+            <a class="topbar-link" href="#introduction">Introduction</a>
+            <a class="topbar-link" href="#works">Works</a>
+        </nav>
+    </header>
 
-    <div class="fixed-tab-l">
-        <a href="#top">
-            <span class="main-text">Top</span>
-        </a>
-        <a href="#introduction">
-            <span class="main-text">Introduction</span>
-        </a>
-        <a href="#works">
-            <span class="main-text">Works</span>
-        </a>
-    </div>
+    <!-- 水面エフェクト用Canvas（fixed, pointer-events:none） -->
+    <canvas id="waterCanvas"></canvas>
 
     <p id="top"></p>
     <img src="jpg/IconAtTatamiRoom.jpg" alt="icon" class="head-image">
@@ -45,19 +42,17 @@
                 <br>
                 <h3>＃基本プロフィール</h3>
                 <p>氏名：松島陽也</p>
-                <p>メールアドレス：haruya.matsu@gmail.com</p>
-                <p>現在の職：明治大学総合数理学部先端メディアサイエンス学科3年生</p>
+                <p>現在の職：明治大学総合数理学部先端メディアサイエンス学科</p>
                 <p>所属研究室：宮下研究室（宮下芳明）</p>
-                <p>好きな技術：生成AI、XR、UI、デジタルファブリケーション、ロボティクス</p>
-                <p>研究の方向性：ヒューマンコンピュータインタラクション（HCI）</p>
+                <p>研究分野：ヒューマンコンピュータインタラクション（HCI）</p>
                 <p>趣味：食事、建築、映画、小説</p>
                 <p>特技：場を盛り上げること</p>
-                <p>経験したプログラミング言語：JavaScript：4,000行（2年半）、C＃：3,000行（3年）、C++：2,000行（2年）、Python：2,000行（2年）、Processing：2,000行（2年）、MATLAB：1,000行（1年）
+                <p>得意なプログラミング言語：JavaScript：4,000行（2年半）、C＃：3,000行（3年）、C++：2,000行（2年）、Python：2,000行（2年）、Processing：2,000行（2年）、MATLAB：1,000行（1年）
                 </p>
-                <p>経験したツール：Unity, Blender, Arduino, DaVinci Resolve, Bambu Studio, Git, Render, SQL, AWS, OpenCV, React
-                </p>
+                <p>得意なツール：Unity, Blender, Fifma, Arduino, DaVinci Resolve, Bambu Studio, Git, Render, SQL, AWS, OpenCV,
+                    React</p>
                 <p>保有資格：TOEIC 775点(2024/12/16)、色彩検定2級、普通自動車第一種免許</p>
-                <p>志望業界：IT系</p>
+                <p>志望業界：インターネットサービス系・広告系</p>
                 <p>志望職種：プロダクトマネージャー・UXデザイナー・フロントエンドエンジニア</p>
                 <br>
                 <h3>＃学歴</h3>
@@ -71,39 +66,45 @@
 
     <div class="add-space"><br></div>
 
-    <div class="black-section">
+    <div class="water-section">
         <h1 id="works">Works</h1>
 
         <div class="gallery-container">
             <div class="gallery-item">
-                <a href="NutriSynth.html">
+                <a href="tsumugi.html" data-ink="vermilion">
+                    <img src="jpg/tsumugi.png" alt="つむぎ日記" class="gallery-image">
+                    <div class="image-description">つむぎ日記</div>
+                </a>
+            </div>
+            <div class="gallery-item">
+                <a href="NutriSynth.html" data-ink="vermilion">
                     <img src="jpg/EC2025パンフレット.jpg" alt="NutriSynth" class="gallery-image">
                     <div class="image-description">NutriSynth</div>
                 </a>
             </div>
             <div class="gallery-item">
-                <a href="StyleDrop.html">
-                    <img src="jpg/StyleDrop.jpg" alt="StyleDrop" class="gallery-image">
-                    <div class="image-description">StyleDrop</div>
+                <a href="totonoeru.html" data-ink="indigo">
+                    <img src="jpg/totonoeru.png" alt="ととのえ～る" class="gallery-image">
+                    <div class="image-description">ととのえ～る</div>
                 </a>
             </div>
         </div>
 
         <div class="gallery-container">
             <div class="gallery-item">
-                <a href="ninjado.html">
+                <a href="ninjado.html" data-ink="ink">
                     <img src="jpg/ninjado.jpg" alt="ninjado" class="gallery-image">
                     <div class="image-description">忍者道</div>
                 </a>
             </div>
             <div class="gallery-item">
-                <a href="driving.html">
+                <a href="driving.html" data-ink="gold">
                     <img src="jpg/driving.jpg" alt="driving" class="gallery-image">
                     <div class="image-description">ドライビングシミュレータ</div>
                 </a>
             </div>
             <div class="gallery-item">
-                <a href="pachinko.html">
+                <a href="pachinko.html" data-ink="vermilion">
                     <img src="jpg/pachinko.jpg" alt="pachinko" class="gallery-image">
                     <div class="image-description">パチンコゲーム</div>
                 </a>
@@ -112,19 +113,19 @@
 
         <div class="gallery-container">
             <div class="gallery-item">
-                <a href="ossan.html">
+                <a href="ossan.html" data-ink="ink">
                     <img src="jpg/ossan.jpg" alt="ossan" class="gallery-image">
                     <div class="image-description">残業シミュレータ</div>
                 </a>
             </div>
             <div class="gallery-item">
-                <a href="musicGeneration.html">
+                <a href="musicGeneration.html" data-ink="indigo">
                     <img src="jpg/musicGeneration.jpg" alt="driving" class="gallery-image">
                     <div class="image-description">動画同期音楽生成</div>
                 </a>
             </div>
             <div class="gallery-item">
-                <a href="summaryEase.html">
+                <a href="summaryEase.html" data-ink="gold">
                     <img src="jpg/summaryEase.jpg" alt="pachinko" class="gallery-image">
                     <div class="image-description">リアルタイム議事録</div>
                 </a>
@@ -133,29 +134,169 @@
 
         <div class="gallery-container">
             <div class="gallery-item">
-                <a href="imageProcessing.html">
+                <a href="StyleDrop.html" data-ink="indigo">
+                    <img src="jpg/StyleDrop.jpg" alt="StyleDrop" class="gallery-image">
+                    <div class="image-description">StyleDrop</div>
+                </a>
+            </div>
+            <div class="gallery-item">
+                <a href="mask.html" data-ink="gold">
+                    <img src="jpg/mask.jpg" alt="mask" class="gallery-image">
+                    <div class="image-description">マスク</div>
+                </a>
+            </div>
+            <div class="gallery-item">
+                <a href="scrapFrontier.html" data-ink="vermilion">
+                    <img src="jpg/scrapFrontier.png" alt="scrapFrontier" class="gallery-image">
+                    <div class="image-description">Scrap Frontier</div>
+                </a>
+            </div>
+        </div>
+
+        <div class="gallery-container">
+            <div class="gallery-item">
+                <a href="imageProcessing.html" data-ink="vermilion">
                     <img src="jpg/imageProcessing.jpg" alt="ninjado" class="gallery-image">
                     <div class="image-description">ベンデイドットアート風画像処理</div>
                 </a>
             </div>
             <div class="gallery-item">
-                <a href="robotFight.html">
+                <a href="robotFight.html" data-ink="indigo">
                     <img src="jpg/robotFight.jpg" alt="driving" class="gallery-image">
                     <div class="image-description">ロボットファイト</div>
                 </a>
             </div>
             <div class="gallery-item">
-                <a href="apsn.html">
+                <a href="apsn.html" data-ink="ink">
                     <img src="jpg/apsn.jpg" alt="pachinko" class="gallery-image">
                     <div class="image-description">AsParisSoNakano</div>
                 </a>
             </div>
         </div>
-
-        <div class="add-space"><br></div>
+        <div class="copyright-text">©Haruya Matsushima</div>
     </div>
 
-    <div class="copyright-text">©Haruya Matsushima</div>
+    <script src="water.js" defer></script>
+    <script src="nav.js" defer></script>
+
+    <!-- 水エフェクト -->
+    <script>
+        (function () {
+            const canvas = document.getElementById('waterCanvas');
+            const ctx = canvas.getContext('2d');
+
+            // リサイズ
+            function resize() {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+            }
+            resize();
+            window.addEventListener('resize', resize);
+
+            // 水しぶきパーティクル
+            const drops = [];
+
+            function spawnSplash(x, y) {
+                const count = 18;
+                for (let i = 0; i < count; i++) {
+                    const angle = (Math.PI * 2 / count) * i - Math.PI / 2;
+                    // 上方向メインに広がる
+                    const spread = (Math.random() * 0.7 + 0.3);
+                    const speed = (Math.random() * 3.5 + 1.5) * spread;
+                    drops.push({
+                        x,
+                        y,
+                        vx: Math.cos(angle) * speed * 0.8,
+                        vy: Math.sin(angle) * speed - 2.5, // 上方向バイアス
+                        radius: Math.random() * 3.5 + 1.2,
+                        alpha: Math.random() * 0.55 + 0.45,
+                        life: 1.0,
+                        decay: Math.random() * 0.025 + 0.018,
+                    });
+                }
+                // 波紋
+                ripples.push({ x, y, r: 0, maxR: 60 + Math.random() * 40, alpha: 0.55, life: 1.0 });
+            }
+
+            const ripples = [];
+
+            function animate() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+                // 波紋
+                for (let i = ripples.length - 1; i >= 0; i--) {
+                    const rp = ripples[i];
+                    rp.r += 2.2;
+                    rp.life -= 0.022;
+                    rp.alpha = rp.life * 0.55;
+                    if (rp.life <= 0) { ripples.splice(i, 1); continue; }
+                    ctx.beginPath();
+                    ctx.arc(rp.x, rp.y, rp.r, 0, Math.PI * 2);
+                    ctx.strokeStyle = `rgba(130, 210, 255, ${rp.alpha})`;
+                    ctx.lineWidth = 1.5;
+                    ctx.stroke();
+                }
+
+                // 水しぶき
+                for (let i = drops.length - 1; i >= 0; i--) {
+                    const d = drops[i];
+                    d.x += d.vx;
+                    d.y += d.vy;
+                    d.vy += 0.18; // 重力
+                    d.life -= d.decay;
+                    d.alpha = d.life * 0.9;
+                    if (d.life <= 0) { drops.splice(i, 1); continue; }
+
+                    // 水しぶき：水色のグラデーション円
+                    const grad = ctx.createRadialGradient(d.x, d.y, 0, d.x, d.y, d.radius);
+                    grad.addColorStop(0, `rgba(200, 240, 255, ${d.alpha})`);
+                    grad.addColorStop(0.6, `rgba(100, 195, 240, ${d.alpha * 0.8})`);
+                    grad.addColorStop(1, `rgba(60, 160, 220, 0)`);
+
+                    ctx.beginPath();
+                    ctx.arc(d.x, d.y, d.radius, 0, Math.PI * 2);
+                    ctx.fillStyle = grad;
+                    ctx.fill();
+                }
+
+                requestAnimationFrame(animate);
+            }
+            animate();
+
+            // --- 境界検出ロジック ---
+            let prevY = null;
+            let prevSection = null; // 'light' or 'dark'
+
+            function getSectionType(x, y) {
+                // elementFromPointで現在の要素を取得
+                const el = document.elementFromPoint(x, y);
+                if (!el) return 'light';
+                const section = el.closest('.black-section');
+                return section ? 'dark' : 'light';
+            }
+
+            document.addEventListener('mousemove', function (e) {
+                const x = e.clientX;
+                const y = e.clientY;
+
+                const dy = prevY !== null ? y - prevY : 0;
+
+                if (dy > 0) { // 下方向のみ
+                    const current = getSectionType(x, y);
+                    if (prevSection !== null && prevSection !== current && current === 'dark') {
+                        // light → dark（作品集エリアに入った）
+                        spawnSplash(x, y);
+                    }
+                    prevSection = current;
+                } else if (dy < 0) {
+                    // 上に戻ったときもセクションを更新（トリガーはしない）
+                    prevSection = getSectionType(x, y);
+                }
+
+                prevY = y;
+            });
+        })();
+    </script>
 </body>
 
 </html>
