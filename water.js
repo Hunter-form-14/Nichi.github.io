@@ -18,25 +18,23 @@
   const CANVAS_BOTTOM = 100;  // キャンバスが下方向にカバーする高さ(px)
   const TOTAL_H = CANVAS_H + CANVAS_BOTTOM; 
 
-  // ── 1. 下層の背景グラデーション（波より下の青い部分）を生成 ──
-  // 波が凹んだときに直線の境界線が見えないよう、開始位置をCANVAS_BOTTOM分だけ下にズラします
+  // ── 1. 下層の背景グラデーション（セクション全体を覆う）──
+  // z-index: -2 にしてキャンバスより下に置く→白線ギャップが生じない
   const bgDiv = document.createElement('div');
   bgDiv.style.cssText = `
     position: absolute;
-    top: ${CANVAS_BOTTOM}px;
+    top: 0;
     left: 0;
     right: 0;
     bottom: 0;
     background: linear-gradient(180deg, #5bb6e6 0%, #1e6fa7 60%, #0e355a 100%);
-    background-position: 0 -${CANVAS_BOTTOM}px;
-    background-size: 100% calc(100% + ${CANVAS_BOTTOM}px);
-    z-index: -1;
+    z-index: -2;
     pointer-events: none;
   `;
   section.style.position = 'relative';
   section.insertBefore(bgDiv, section.firstChild);
 
-  // ── 2. 水面上に被せるCanvas（波を描画する部分） ──
+  // ── 2. 水面上に被せるCanvas（波を描画する部分）z-index: -1 でbgDivより前面 ──
   const canvas = document.createElement('canvas');
   canvas.style.cssText = `
     position: absolute;
@@ -97,31 +95,51 @@
     pos[COLS] *= 0.4;
   }
 
-  // ── マウス判定 ──────────────────────────────────────────
+  // ── インタラクション判定（マウス＋タッチ共通）──────────────
   let prevX = -1, prevY = -1, prevT = performance.now();
 
-  document.addEventListener('mousemove', (e) => {
+  function handleInteract(clientX, clientY) {
     const rect   = section.getBoundingClientRect();
-    const localY = e.clientY - rect.top;
-    
-    const now   = performance.now();
-    const dt    = Math.max(1, now - prevT);
+    const localY = clientY - rect.top;
+    const now    = performance.now();
+    const dt     = Math.max(1, now - prevT);
 
-    if (localY > -CANVAS_H && localY < CANVAS_BOTTOM) {
+    if (localY > -CANVAS_H && localY < section.offsetHeight) {
       if (prevX !== -1) {
-        // スピードの算出
-        const speed = Math.hypot(e.clientX - prevX, e.clientY - prevY) / dt * 16;
-        if (speed > 1) {
+        const speed = Math.hypot(clientX - prevX, clientY - prevY) / dt * 16;
+        if (speed > 0.5) {
           const force = Math.min(speed * 0.3, 3);
-          splat((e.clientX - rect.left) / section.offsetWidth, force);
+          splat((clientX - rect.left) / section.offsetWidth, force);
         }
       }
     }
-    
-    prevX = e.clientX;
-    prevY = e.clientY;
+    prevX = clientX;
+    prevY = clientY;
     prevT = now;
+  }
+
+  document.addEventListener('mousemove', (e) => {
+    handleInteract(e.clientX, e.clientY);
   });
+
+  // スマホ用タッチイベント
+  document.addEventListener('touchmove', (e) => {
+    const t = e.touches[0];
+    handleInteract(t.clientX, t.clientY);
+  }, { passive: true });
+
+  document.addEventListener('touchstart', (e) => {
+    const t = e.touches[0];
+    prevX = t.clientX;
+    prevY = t.clientY;
+    prevT = performance.now();
+    // タップ時にも波を起こす
+    const rect = section.getBoundingClientRect();
+    const localY = t.clientY - rect.top;
+    if (localY > -CANVAS_H && localY < section.offsetHeight) {
+      splat((t.clientX - rect.left) / section.offsetWidth, 2.0);
+    }
+  }, { passive: true });
 
   // ── 描画 ───────────────────────────────────────────────
   function draw() {

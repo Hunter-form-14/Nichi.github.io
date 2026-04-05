@@ -174,3 +174,82 @@
   border-radius: 14px;
   box-shadow: 0 12px 30px rgba(18, 22, 26, 0.10);
 }
+/* ========================================
+   スマホ対応（768px以下）
+   ======================================== */
+@media (max-width: 768px) {
+
+  /* 左右分割 → 上下スタック */
+  .split-container {
+    flex-direction: column;
+    height: auto;
+    min-height: 100vh;
+  }
+
+  .left-pane {
+    width: 100%;
+    height: auto;
+    overflow-y: visible;
+    padding: 80px 24px 32px;
+  }
+
+  .right-pane {
+    width: 100%;
+    height: auto;
+    overflow-y: visible;
+    padding: 32px 24px 48px;
+    gap: 20px;
+    justify-content: flex-start;
+  }
+
+  /* iframeをレスポンシブ化 */
+  .right-pane iframe {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 16 / 9;
+    max-width: 100%;
+    flex-shrink: 0;
+  }
+
+  /* 画像を幅いっぱいに */
+  .content-media {
+    max-width: 100%;
+    margin-top: 0;
+  }
+
+  /* ボタンを小さく */
+  .play-button {
+    padding: 10px 18px;
+    font-size: 0.9rem;
+    margin: 10px 6px 10px 0;
+  }
+
+  /* h2フォントサイズ調整 */
+  .left-pane h2 {
+    font-size: clamp(1.1rem, 4vw, 1.4rem);
+  }
+
+  /* コードブロック */
+  .code-container pre.prettyprint {
+    max-height: 260px;
+    font-size: 0.8rem;
+  }
+}
+
+/* タブレット対応（769〜1024px） */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .left-pane {
+    padding: 80px 32px 32px;
+  }
+
+  .right-pane {
+    padding: 60px 24px;
+    gap: 20px;
+  }
+
+  .right-pane iframe {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 16 / 9;
+  }
+}
