@@ -158,7 +158,7 @@
       const y = CANVAS_H + pos[i];
       i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
     }
-    ctx.strokeStyle = `rgba(${140 + glow * 60}, ${215 + glow * 25}, 255, ${0.55 + glow * 0.45})`;
+    ctx.strokeStyle = `rgba(${140 + glow * 60}, ${215 + glow * 25}, 255, ${glow})`;    
     ctx.lineWidth   = 1.5 + glow * 2;
     ctx.shadowColor = '#7dd4f8';
     ctx.shadowBlur  = 6 + glow * 14;
